@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@styled-system/*": [
+        "./styled-system/*"
       ]
     }
   },
@@ -33,7 +36,8 @@
     "node_modules/vitest/globals.d.ts",
     "vite.config.ts",
     ".storybook/**/*",
-    "panda.config.ts"
+    "panda.config.ts",
+    "styled-system"
   ],
   "references": [
     {

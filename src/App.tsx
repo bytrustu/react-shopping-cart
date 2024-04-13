@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect } from 'react';
+import { css } from '@styled-system/css';
 import { Product } from '@/types/product.type.ts';
 
 const App = () => {
@@ -13,7 +14,17 @@ const App = () => {
     fetchProducts();
   }, []);
 
-  return <>1234</>;
+  return (
+    <div
+      className={css({
+        color: 'mustard',
+        fontWeight: 'bold',
+        zIndex: 'overlay',
+      })}
+    >
+      1234
+    </div>
+  );
 };
 
 export default App;

@@ -1,5 +1,5 @@
 import { http, HttpResponse, PathParams } from 'msw';
-import { products, carts, orders } from '@/mocks/data';
+import { products, carts, orders } from './data/shoppingCartWorld';
 import type { Cart, Order, Product } from '@/types';
 
 const allProducts = new Map<number, Product>(products.map((product) => [product.id, product]));
