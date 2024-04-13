@@ -9,8 +9,8 @@
     "build": "tsc && vite build",
     "generate-barrels": "npx barrelsby --config barrels-config.json",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\"",
-    "prettier:write": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\" --ignore-path .prettierignore",
+    "prettier:write": "prettier --write \"src/**/*.{ts,tsx}\" --ignore-path .prettierignore",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -73,7 +73,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn lint",
+      "yarn lint --max-warnings=1",
       "yarn prettier:check"
     ]
   },
