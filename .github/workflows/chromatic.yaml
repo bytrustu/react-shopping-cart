@@ -1,0 +1,32 @@
+name: Chromatic Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - bytrustu
+    paths:
+      - 'src/components/**'
+
+jobs:
+  chromatic-deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Run Chromatic
+        uses: chromaui/action@v1
+        with:
+          token: chpt_806b995c8415312
+          projectToken: chpt_806b995c8415312
+          exitZeroOnChanges: true
