@@ -3,7 +3,10 @@
   "directory": [
     "./src/types",
     "./src/utils",
-    "./src/components"
+    "./src/components",
+    "./src/pages",
+    "./src/queries",
+    "./src/hooks"
   ],
   "exclude": [
     ".spec.tsx",

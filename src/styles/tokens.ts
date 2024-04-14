@@ -14,7 +14,7 @@ export const tokens = {
     teal200: { value: '#04C09E' },
     mustard: { value: '#cbba64' },
     shadow: { value: 'rgba(0, 0, 0, 0.25)' },
-    body: { value: '#e5e5e5' },
+    blue: { value: '#3869da' },
   },
   fontSizes: {
     caption: { value: '12px' },
@@ -25,11 +25,17 @@ export const tokens = {
     display: { value: '24px' },
   },
   zIndex: {
+    header: { value: 1000 },
     overlay: { value: 1300 },
     modal: { value: 1400 },
     popover: { value: 1500 },
     toast: { value: 1600 },
     tooltip: { value: 1700 },
     loading: { value: 1800 },
+  },
+  animations: {
+    spin: {
+      value: 'spin 1s linear infinite',
+    },
   },
 } as const;

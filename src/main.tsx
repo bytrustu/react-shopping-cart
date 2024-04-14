@@ -5,6 +5,7 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { enableMocking } from './mocks/enableMocking';
 import { routeTree } from '@/routeTree.gen';
 import './index.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const queryClient = new QueryClient();
 
