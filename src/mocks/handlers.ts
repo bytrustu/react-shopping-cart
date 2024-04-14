@@ -1,17 +1,31 @@
-import { http, HttpResponse, PathParams } from 'msw';
-import { products, carts, orders } from './data/shoppingCartWorld';
+import { delay, http, HttpResponse, PathParams } from 'msw';
+import { products, orders } from './data/shoppingCartWorld';
 import type { Cart, Order, Product } from '@/types';
 
 const allProducts = new Map<number, Product>(products.map((product) => [product.id, product]));
-const allCarts = new Map<number, Cart>(carts.map((cart) => [cart.id, cart]));
+let allCarts: Cart[] = [];
 const allOrders = new Map<number, Order>(orders.map((order) => [order.id, order]));
 
+const SERVER_DELAY_MS = 2000;
+
 export const handlers = [
-  http.get('/products', () => HttpResponse.json(Array.from(allProducts.values()))),
-  http.post<PathParams, Product>('/products', async ({ request }) => {
-    const newProduct = await request.json();
-    allProducts.set(newProduct.id, newProduct);
-    return HttpResponse.json(newProduct, { status: 201 });
+  http.get('/products', async ({ request }) => {
+    const url = new URL(request.url);
+    const offset = parseInt(url.searchParams.get('offset') || '0', 10);
+    const limit = parseInt(url.searchParams.get('limit') || '8', 10);
+    const productsArray = Array.from(allProducts.values());
+    const paginatedProducts = productsArray.slice(offset, offset + limit);
+
+    const total = productsArray.length;
+    const nextCursor = offset + limit < total ? offset + limit : null;
+
+    await delay(SERVER_DELAY_MS);
+
+    return HttpResponse.json({
+      products: paginatedProducts,
+      total,
+      nextCursor,
+    });
   }),
   http.get('/products/:id', ({ params }) => {
     const product = allProducts.get(Number(params.id));
@@ -29,20 +43,36 @@ export const handlers = [
     return HttpResponse.json({ message: '상품 정보가 없습니다.' }, { status: 404 });
   }),
 
-  http.get('/carts', () => HttpResponse.json(Array.from(allCarts.values()))),
-  http.post<PathParams, Cart>('/carts', async ({ request }) => {
-    const newCart = await request.json();
-    const cartId = allCarts.size + 1;
-    allCarts.set(cartId, { ...newCart, id: cartId });
-    return HttpResponse.json(allCarts.get(cartId), { status: 201 });
+  http.post<PathParams, { data: number[] }>('/carts', async ({ request }) => {
+    const { data } = await request.json();
+    const newCarts = data.reduce((acc: Cart[], id) => {
+      const product = allProducts.get(id);
+      if (product) {
+        acc.push({
+          ...product,
+          quantity: 1,
+        });
+      }
+      return acc;
+    }, []);
+    allCarts = newCarts;
+    return HttpResponse.json(newCarts, { status: 201 });
   }),
-  http.delete('/carts/:cartId', ({ params }) => {
-    const deletedCartItem = allCarts.get(Number(params.cartId));
-    if (deletedCartItem) {
-      allCarts.delete(Number(params.cartId));
-      return HttpResponse.json({});
+  http.post<PathParams, { data: Cart }>('/cart', async ({ request }) => {
+    const { data: newCart } = await request.json();
+    allCarts.push(newCart);
+    await delay(SERVER_DELAY_MS);
+    return HttpResponse.json(newCart, { status: 201 });
+  }),
+  http.get('/carts', () => HttpResponse.json(Array.from(allCarts.values()))),
+  http.delete('/carts/:cartId', async ({ params }) => {
+    const deletedCarts = allCarts.find((cart) => cart.id === Number(params.cartId));
+    if (deletedCarts) {
+      allCarts = allCarts.filter((cart) => cart.id !== deletedCarts.id);
+      return HttpResponse.json({ id: deletedCarts.id });
     }
-    return HttpResponse.json({ message: '장바구니 정보가 없습니다.' }, { status: 404 });
+    await delay(SERVER_DELAY_MS);
+    return HttpResponse.json({ message: '장바구니에 상품 정보가 없습니다.' }, { status: 404 });
   }),
 
   http.get('/orders', () => HttpResponse.json(Array.from(allOrders.values()))),
