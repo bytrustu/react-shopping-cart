@@ -1,4 +1,4 @@
-import { IoCart } from 'react-icons/io5';
+import { PiShoppingCartSimpleFill } from 'react-icons/pi';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
 import { Link, useNavigate } from '@tanstack/react-router';
@@ -17,9 +17,10 @@ const Logo = () => {
   const moveToHome = () => {
     navigate({ to: '/' });
   };
+
   return (
     <Button variant="ghost" className={flex({ alignItems: 'center', gap: '10px', padding: 0 })} onClick={moveToHome}>
-      <IoCart size={24} color="white" />
+      <PiShoppingCartSimpleFill size={24} color="white" />
       <Typography variant="display" className={css({ fontWeight: 'bold', color: 'white' })}>
         NEXTSTEP
       </Typography>
