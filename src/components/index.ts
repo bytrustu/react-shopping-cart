@@ -5,4 +5,5 @@
 export * from './Button/index';
 export * from './GlobalNavigation/index';
 export * from './Layout/index';
+export * from './Product/index';
 export * from './Typography/index';
