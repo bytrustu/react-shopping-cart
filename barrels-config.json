@@ -2,7 +2,8 @@
   "delete": true,
   "directory": [
     "./src/types",
-    "./src/utils"
+    "./src/utils",
+    "./src/components"
   ],
   "exclude": [
     ".spec.tsx",

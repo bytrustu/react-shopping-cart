@@ -16,7 +16,7 @@ export const tokens = {
     shadow: { value: 'rgba(0, 0, 0, 0.25)' },
     body: { value: '#e5e5e5' },
   },
-  fontSize: {
+  fontSizes: {
     caption: { value: '12px' },
     body: { value: '14px' },
     subtitle: { value: '16px' },
