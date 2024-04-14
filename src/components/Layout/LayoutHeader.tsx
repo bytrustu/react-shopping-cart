@@ -1,0 +1,33 @@
+import { css } from '@styled-system/css';
+import { GlobalNavigation } from '@/components/GlobalNavigation/GlobalNavigation.tsx';
+
+const MENU_PATHS = [
+  {
+    title: '장바구니',
+    path: '/cart',
+  },
+  {
+    title: '주문목록',
+    path: '/orders',
+  },
+];
+
+export const LayoutHeader = () => (
+  <header className={headerStyles}>
+    <GlobalNavigation menuPaths={MENU_PATHS} />
+  </header>
+);
+
+const headerStyles = css({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  height: '60px',
+  backgroundColor: 'teal200',
+});
+
+LayoutHeader.displayName = 'LayoutHeader';
