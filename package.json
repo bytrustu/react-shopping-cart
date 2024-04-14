@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "panda codegen",
     "dev": "vite",
-    "build": "yarn prepare && tsc && vite build",
+    "build": "yarn prepare && tsc && vite --mode development build",
     "generate-barrels": "npx barrelsby --config barrels-config.json",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\" --ignore-path .prettierignore",
