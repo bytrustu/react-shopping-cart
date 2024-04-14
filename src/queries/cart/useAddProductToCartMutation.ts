@@ -1,35 +1,33 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../queryKeys';
+import { QUERY_KEYS } from '../queryKeys.ts';
 import { Cart } from '@/types';
 import { http } from '@/utils';
 
-export type UseRemoveProductFromCartMutation = {
+export type UseAddProductToCartMutation = {
   onMutate?: () => void;
 };
 
-export const useRemoveProductFromCartMutation = ({ onMutate }: UseRemoveProductFromCartMutation = {}) => {
+export const useAddProductToCartMutation = ({ onMutate }: UseAddProductToCartMutation = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (cartId: number) => http.delete<{ id: number }>(`/carts/${cartId}`),
+    mutationFn: (cart: Cart) => http.post<Cart, Cart>('/cart', cart),
 
-    onMutate: async (cartId) => {
+    onMutate: async (cart) => {
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.CARTS() });
       const previousCarts = queryClient.getQueryData<Cart[]>(QUERY_KEYS.CARTS()) || [];
 
-      queryClient.setQueryData<Cart[]>(
-        QUERY_KEYS.CARTS(),
-        (currentCarts) => currentCarts?.filter((cart) => cart.id !== cartId) || [],
-      );
+      queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), [...previousCarts, cart]);
       onMutate?.();
       return previousCarts;
     },
 
-    onError: (_error, _cartId, context) => {
+    onError: (_error, _product, context) => {
       queryClient.setQueryData(QUERY_KEYS.CARTS(), context);
     },
 
-    onSuccess: () => {
+    onSuccess: (newCart: Cart) => {
+      queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), (prevCarts) => [...(prevCarts ?? []), newCart]);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CARTS() });
     },
   });
