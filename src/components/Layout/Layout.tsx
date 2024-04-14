@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { css } from '@styled-system/css';
-import { LayoutBody, LayoutHeader } from '@/components';
+import { LayoutBody } from './LayoutBody';
+import { LayoutHeader } from './LayoutHeader';
 
 export const Layout = ({ children }: PropsWithChildren) => (
   <div

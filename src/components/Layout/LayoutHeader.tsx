@@ -1,5 +1,5 @@
 import { css } from '@styled-system/css';
-import { GlobalNavigation } from '@/components/GlobalNavigation/GlobalNavigation.tsx';
+import { GlobalNavigation } from '@/components';
 
 const MENU_PATHS = [
   {
@@ -28,6 +28,7 @@ const headerStyles = css({
   width: '100%',
   height: '60px',
   backgroundColor: 'teal200',
+  zIndex: 'header',
 });
 
 LayoutHeader.displayName = 'LayoutHeader';
