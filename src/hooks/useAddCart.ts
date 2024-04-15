@@ -29,5 +29,5 @@ export const useAddToCart = () => {
     });
   };
 
-  return { addCart };
+  return { open: addCart, close: alertStore.close };
 };
