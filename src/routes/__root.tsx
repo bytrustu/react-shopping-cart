@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { Layout } from '@/components';
+import { Alert, Layout } from '@/components';
 
 export const Route = createRootRoute({
   component: () => (
@@ -10,6 +10,7 @@ export const Route = createRootRoute({
         <Outlet />
       </Layout.Body>
       <TanStackRouterDevtools position="bottom-right" />
+      <Alert />
     </Layout.Root>
   ),
 });

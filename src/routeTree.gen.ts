@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ProductIdImport } from './routes/product_.$id'
 
 // Create Virtual Routes
 
@@ -37,6 +38,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const ProductIdRoute = ProductIdImport.update({
+  path: '/product/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -53,6 +59,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersLazyImport
       parentRoute: typeof rootRoute
     }
+    '/product/$id': {
+      preLoaderRoute: typeof ProductIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -62,6 +72,7 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   CartLazyRoute,
   OrdersLazyRoute,
+  ProductIdRoute,
 ])
 
 /* prettier-ignore-end */

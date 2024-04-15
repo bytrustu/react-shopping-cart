@@ -6,7 +6,7 @@ const allProducts = new Map<number, Product>(products.map((product) => [product.
 let allCarts: Cart[] = [];
 const allOrders = new Map<number, Order>(orders.map((order) => [order.id, order]));
 
-const SERVER_DELAY_MS = 2000;
+const SERVER_DELAY_MS = 1500;
 
 export const handlers = [
   http.get('/products', async ({ request }) => {
