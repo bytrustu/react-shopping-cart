@@ -23,7 +23,3 @@ export const Default: Story = {
     ...products[0],
   },
 };
-
-export const AddedToCart: Story = {
-  render: (args) => <Product {...args} addedToCart />,
-};

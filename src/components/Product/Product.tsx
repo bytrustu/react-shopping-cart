@@ -1,25 +1,31 @@
-import { PiShoppingCartSimpleFill, PiShoppingCartSimpleLight } from 'react-icons/pi';
+import { PiShoppingCartSimpleLight } from 'react-icons/pi';
 import { z } from 'zod';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
 import { Button, Typography } from '@/components';
 import { tokens } from '@/styles/tokens.ts';
-import { ProductWithCartSchema } from '@/types';
+import { ProductSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
-export const ProductPropsScheme = ProductWithCartSchema.extend({
+export const ProductPropsScheme = ProductSchema.extend({
   addCart: z.function().args(z.number()).returns(z.void()),
-  removeCart: z.function().args(z.number()).returns(z.void()),
+  moveToProductDetail: z.function().args(z.number()).returns(z.void()),
 });
 
 export type ProductProps = z.infer<typeof ProductPropsScheme>;
 
-export const Product = ({ id, name, price = 0, imageUrl, addedToCart = false, addCart, removeCart }: ProductProps) => {
+export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductDetail }: ProductProps) => {
   const priceString = `${formatNumberWithCommas(price)} 원`;
-  const toggleCart = addedToCart ? removeCart : addCart;
 
   return (
-    <div>
+    <Button
+      variant="ghost"
+      onClick={() => moveToProductDetail(id)}
+      className={css({
+        padding: 0,
+        color: 'unset',
+      })}
+    >
       <img src={imageUrl} alt={name} />
       <div
         className={flex({
@@ -34,6 +40,7 @@ export const Product = ({ id, name, price = 0, imageUrl, addedToCart = false, ad
           className={css({
             width: '100%',
             height: '48px',
+            textAlign: 'left',
           })}
         >
           <Typography variant="subtitle">{name}</Typography>
@@ -57,24 +64,17 @@ export const Product = ({ id, name, price = 0, imageUrl, addedToCart = false, ad
           <Button
             variant="ghost"
             className={css({ padding: 0 })}
-            onClick={() => {
-              toggleCart(id);
+            onClick={(e) => {
+              e.stopPropagation();
+              addCart(id);
             }}
           >
-            <CartIcon addedToCart={addedToCart} />
+            <PiShoppingCartSimpleLight size={24} color={tokens.colors.blue.value} />
           </Button>
         </div>
       </div>
-    </div>
+    </Button>
   );
-};
-
-const CartIcon = ({ addedToCart }: Pick<ProductProps, 'addedToCart'>) => {
-  if (addedToCart) {
-    return <PiShoppingCartSimpleFill size={24} color={tokens.colors.blue.value} />;
-  }
-
-  return <PiShoppingCartSimpleLight size={24} color={tokens.colors.blue.value} />;
 };
 
 Product.displayName = 'Product';
