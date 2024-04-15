@@ -1,26 +1,30 @@
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
-import { Button } from '@/components';
+import { Button, Typography } from '@/components';
 import { useAlertStore } from '@/store';
 
 export const Alert = () => {
   const alertStore = useAlertStore();
-  const { opened, options } = alertStore;
 
-  if (!opened) {
+  if (!alertStore.opened) {
     return null;
   }
+
+  const confirmText = alertStore.options.confirmText || '확인';
+  const cancelText = alertStore.options.cancelText || '취소';
 
   return (
     <div role="dialog" aria-modal="true" className={overlayStyles}>
       <article className={modalStyles}>
-        <p className={messageStyles}>{options.message}</p>
+        <Typography variant="subtitle" className={messageStyles}>
+          {alertStore.options.message}
+        </Typography>
         <section className={buttonContainerStyles}>
-          <Button className={buttonStyles} variant="solid" colorScheme="gray" onClick={options.onClose}>
-            {options.cancelText || '취소'}
+          <Button className={buttonStyles} variant="solid" colorScheme="gray" onClick={alertStore.options.onClose}>
+            {cancelText}
           </Button>
-          <Button className={buttonStyles} variant="solid" colorScheme="teal" onClick={options.onConfirm}>
-            {options.confirmText || '확인'}
+          <Button className={buttonStyles} variant="solid" colorScheme="teal" onClick={alertStore.options.onConfirm}>
+            {confirmText}
           </Button>
         </section>
       </article>
