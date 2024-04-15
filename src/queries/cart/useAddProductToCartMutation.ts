@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '../queryKeys.ts';
+import { LOCAL_STORAGE_CART_KEY } from '@/constants';
 import { Cart } from '@/types';
-import { http } from '@/utils';
+import { http, localStorageUtil } from '@/utils';
 
 export type UseAddProductToCartMutation = {
   onMutate?: () => void;
@@ -29,6 +30,11 @@ export const useAddProductToCartMutation = ({ onMutate }: UseAddProductToCartMut
     onSuccess: (newCart: Cart) => {
       queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), (prevCarts) => [...(prevCarts ?? []), newCart]);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CARTS() });
+      const cartIds = localStorageUtil.getItem<number[]>(LOCAL_STORAGE_CART_KEY) || [];
+      if (cartIds?.includes(newCart.id)) {
+        return;
+      }
+      localStorageUtil.setItem(LOCAL_STORAGE_CART_KEY, [...(cartIds ?? []), newCart.id]);
     },
   });
 };

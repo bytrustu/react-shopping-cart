@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '../queryKeys.ts';
+import { LOCAL_STORAGE_CART_KEY } from '@/constants';
 import { Cart } from '@/types';
-import { http } from '@/utils';
+import { http, localStorageUtil } from '@/utils';
 
 export type UseRemoveProductFromCartMutation = {
   onMutate?: () => void;
@@ -29,8 +30,15 @@ export const useRemoveProductFromCartMutation = ({ onMutate }: UseRemoveProductF
       queryClient.setQueryData(QUERY_KEYS.CARTS(), context);
     },
 
-    onSuccess: () => {
+    onSuccess: ({ id }) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CARTS() });
+      const cartIds = localStorageUtil.getItem<number[]>(LOCAL_STORAGE_CART_KEY) || [];
+      if (cartIds?.includes(id)) {
+        localStorageUtil.setItem(
+          'carts',
+          cartIds.filter((cartId) => cartId !== id),
+        );
+      }
     },
   });
 };

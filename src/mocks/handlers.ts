@@ -60,18 +60,18 @@ export const handlers = [
   }),
   http.post<PathParams, { data: Cart }>('/cart', async ({ request }) => {
     const { data: newCart } = await request.json();
-    allCarts.push(newCart);
     await delay(SERVER_DELAY_MS);
+    allCarts.push(newCart);
     return HttpResponse.json(newCart, { status: 201 });
   }),
   http.get('/carts', () => HttpResponse.json(Array.from(allCarts.values()))),
   http.delete('/carts/:cartId', async ({ params }) => {
     const deletedCarts = allCarts.find((cart) => cart.id === Number(params.cartId));
     if (deletedCarts) {
+      await delay(SERVER_DELAY_MS);
       allCarts = allCarts.filter((cart) => cart.id !== deletedCarts.id);
       return HttpResponse.json({ id: deletedCarts.id });
     }
-    await delay(SERVER_DELAY_MS);
     return HttpResponse.json({ message: '장바구니에 상품 정보가 없습니다.' }, { status: 404 });
   }),
 

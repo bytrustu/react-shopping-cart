@@ -4,5 +4,4 @@
 
 export * from './useAddProductToCartMutation';
 export * from './useCartsQuery';
-export * from './useInitializeCarts';
 export * from './useRemoveProductToCartMutation';
