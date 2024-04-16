@@ -18,62 +18,62 @@ export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductD
   const priceString = `${formatNumberWithCommas(price)} 원`;
 
   return (
-    <Button
-      variant="ghost"
-      onClick={() => moveToProductDetail(id)}
-      className={css({
-        padding: 0,
-        color: 'unset',
+    <section
+      className={flex({
+        width: '100%',
+        flexDirection: 'column',
+        alignItems: 'space-between',
+        marginTop: '10px',
+        outline: '1px solid #ddd',
+        borderRadius: '4px',
       })}
     >
-      <img src={imageUrl} alt={name} />
-      <div
-        className={flex({
-          width: '100%',
-          flexDirection: 'column',
-          alignItems: 'space-between',
-          marginTop: '10px',
-          paddingX: '6px',
-        })}
-      >
+      <Button variant="ghost" className={css({ padding: 0 })} onClick={() => moveToProductDetail(id)}>
+        <img src={imageUrl} alt={name} />
         <div
           className={css({
             width: '100%',
             height: '48px',
             textAlign: 'left',
+            marginTop: '10px',
+            paddingX: '6px',
+            overflow: 'hidden',
           })}
         >
-          <Typography variant="subtitle">{name}</Typography>
+          <Typography variant="subtitle" className={css({ color: 'black' })}>
+            {name}
+          </Typography>
         </div>
-        <hr
-          className={css({
-            width: '100%',
-            height: '1px',
-            borderTop: `1px solid #ddd`,
-            margin: '10px 0',
-          })}
-        />
-        <div
-          className={flex({
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-          })}
+      </Button>
+      <hr
+        className={css({
+          width: '100%',
+          height: '1px',
+          borderTop: `1px solid #ddd`,
+          margin: '10px 0',
+        })}
+      />
+      <div
+        className={flex({
+          width: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          padding: '0 10px 6px',
+        })}
+      >
+        <Typography variant="body">{priceString}</Typography>
+        <Button
+          variant="ghost"
+          className={css({ padding: 0 })}
+          onClick={(e) => {
+            e.stopPropagation();
+            addCart(id);
+          }}
         >
-          <Typography variant="body">{priceString}</Typography>
-          <Button
-            variant="ghost"
-            className={css({ padding: 0 })}
-            onClick={(e) => {
-              e.stopPropagation();
-              addCart(id);
-            }}
-          >
-            <PiShoppingCartSimpleLight size={24} color={tokens.colors.blue.value} />
-          </Button>
-        </div>
+          <PiShoppingCartSimpleLight size={24} color={tokens.colors.blue.value} />
+        </Button>
       </div>
-    </Button>
+    </section>
   );
 };
 

@@ -10,6 +10,7 @@ const SERVER_DELAY_MS = 1500;
 
 export const handlers = [
   http.get('/products', async ({ request }) => {
+    await delay(SERVER_DELAY_MS);
     const url = new URL(request.url);
     const offset = parseInt(url.searchParams.get('offset') || '0', 10);
     const limit = parseInt(url.searchParams.get('limit') || '8', 10);
@@ -19,15 +20,14 @@ export const handlers = [
     const total = productsArray.length;
     const nextCursor = offset + limit < total ? offset + limit : null;
 
-    await delay(SERVER_DELAY_MS);
-
     return HttpResponse.json({
       products: paginatedProducts,
       total,
       nextCursor,
     });
   }),
-  http.get('/products/:id', ({ params }) => {
+  http.get('/products/:id', async ({ params }) => {
+    await delay(SERVER_DELAY_MS / 3);
     const product = allProducts.get(Number(params.id));
     if (product) {
       return HttpResponse.json(product);
@@ -59,16 +59,16 @@ export const handlers = [
     return HttpResponse.json(newCarts, { status: 201 });
   }),
   http.post<PathParams, { data: Cart }>('/cart', async ({ request }) => {
-    const { data: newCart } = await request.json();
     await delay(SERVER_DELAY_MS);
+    const { data: newCart } = await request.json();
     allCarts.push(newCart);
     return HttpResponse.json(newCart, { status: 201 });
   }),
   http.get('/carts', () => HttpResponse.json(Array.from(allCarts.values()))),
   http.delete('/carts/:cartId', async ({ params }) => {
+    await delay(SERVER_DELAY_MS);
     const deletedCarts = allCarts.find((cart) => cart.id === Number(params.cartId));
     if (deletedCarts) {
-      await delay(SERVER_DELAY_MS);
       allCarts = allCarts.filter((cart) => cart.id !== deletedCarts.id);
       return HttpResponse.json({ id: deletedCarts.id });
     }

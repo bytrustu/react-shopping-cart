@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
-import { ProductDetail } from '@/components/ProductDetail/ProductDetail.tsx';
+import { ErrorBoundary } from 'react-error-boundary';
+import Skeleton from 'react-loading-skeleton';
+import { ProductDetail } from '@/components';
 import { useAddToCart } from '@/hooks';
 import { useProductQuery } from '@/queries';
 import { Route } from '@/routes/product_.$id.tsx';
@@ -16,19 +18,13 @@ export const ProductDetailPage = () => {
   useEffect(() => addToCart.close, []);
 
   return (
-    <ProductDetail.Root loading={productsQuery.isLoading}>
-      {product && (
-        <>
-          <ProductDetail.Image imageUrl={product.imageUrl} name={product.name} />
-          <ProductDetail.Info
-            name={product.name}
-            price={product.price}
-            onAddToCart={() => {
-              addToCart.open(productId);
-            }}
-          />
-        </>
-      )}
+    <ProductDetail.Root loading={productsQuery.isLoading} product={product} addToCart={addToCart.open}>
+      <ErrorBoundary fallback={<Skeleton height="500px" />} resetKeys={['productDetail', product?.imageUrl]}>
+        <ProductDetail.Image />
+      </ErrorBoundary>
+      <ErrorBoundary fallback={<Skeleton height="500px" />} resetKeys={['productDetail', product?.price]}>
+        <ProductDetail.Info />
+      </ErrorBoundary>
     </ProductDetail.Root>
   );
 };
