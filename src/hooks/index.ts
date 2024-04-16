@@ -3,4 +3,6 @@
  */
 
 export * from './useAddCart';
+export * from './useAlert';
+export * from './useOverlay';
 export * from './useProductsData';

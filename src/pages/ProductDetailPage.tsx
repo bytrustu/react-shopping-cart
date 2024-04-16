@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { PiBowlFoodDuotone } from 'react-icons/pi';
 import Skeleton from 'react-loading-skeleton';
@@ -13,8 +12,6 @@ export const ProductDetailPage = () => {
   const { id } = Route.useParams();
   const productId = Number(id);
   const productsQuery = useProductQuery({ id: productId });
-
-  useEffect(() => addToCart.close, []);
 
   if (!productsQuery.isLoading && !productsQuery.data) {
     return <EmptyDescription icon={<PiBowlFoodDuotone />} description="존재하지 않는 상품입니다." />;

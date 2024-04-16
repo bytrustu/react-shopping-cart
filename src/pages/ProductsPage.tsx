@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { Products } from '@/components';
 import { useAddToCart, useProductsData } from '@/hooks';
@@ -14,8 +13,6 @@ export const ProductsPage = () => {
       params: { id: String(id) },
     });
   };
-
-  useEffect(() => addToCart.close, []);
 
   return (
     <>
