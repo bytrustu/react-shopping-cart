@@ -58,6 +58,7 @@ export const OrderHistory = ({ orders }: OrderHistoryProps) => {
 const OrderHeader = ({ order, totalPrice }: OrderHeaderProps) => {
   const formattedDate = new Date(order.timestamp).toLocaleDateString('ko-KR');
   const formattedOrderId = order.id.toString();
+  const priceString = `${formatNumberWithCommas(totalPrice)}원`;
 
   return (
     <header className={orderHeaderStyle}>
@@ -71,7 +72,7 @@ const OrderHeader = ({ order, totalPrice }: OrderHeaderProps) => {
       <div className={orderHeaderActionsStyle}>
         <UnderlineButton>
           <Typography as="span" variant="body">
-            결제상세 {formatNumberWithCommas(totalPrice)}원
+            결제상세 {priceString}원
           </Typography>
         </UnderlineButton>
         <UnderlineButton>

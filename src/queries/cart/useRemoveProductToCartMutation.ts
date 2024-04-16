@@ -35,7 +35,7 @@ export const useRemoveProductFromCartMutation = ({ onMutate }: UseRemoveProductF
       const cartIds = localStorageUtil.getItem<number[]>(LOCAL_STORAGE_CART_KEY) || [];
       if (cartIds?.includes(id)) {
         localStorageUtil.setItem(
-          'carts',
+          LOCAL_STORAGE_CART_KEY,
           cartIds.filter((cartId) => cartId !== id),
         );
       }

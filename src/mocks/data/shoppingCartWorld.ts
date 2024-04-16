@@ -245,4 +245,26 @@ export const products: Product[] = [
 
 export const carts: Cart[] = [];
 
-export const orders: Order[] = [];
+export const orders: Order[] = [
+  {
+    id: 12341234,
+    products: [
+      {
+        id: 1,
+        name: '냉면용기(대)',
+        price: 83700,
+        imageUrl: 'https://cdn-mart.baemin.com/goods/2/1556008840639m0.jpg',
+        quantity: 1,
+      },
+      {
+        id: 2,
+        name: '생새우살 (71/90) 500g 4개',
+        price: 29000,
+        imageUrl: 'https://cdn-mart.baemin.com/sellergoods/main/6b95c66a-c13d-4ccd-9df5-b1af1428a225.jpg',
+        quantity: 2,
+      },
+    ],
+    totalPrice: 141700,
+    timestamp: 1630200000000,
+  },
+];

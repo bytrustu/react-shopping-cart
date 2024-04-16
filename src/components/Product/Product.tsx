@@ -2,7 +2,7 @@ import { PiShoppingCartSimpleLight } from 'react-icons/pi';
 import { z } from 'zod';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
-import { Button, Typography } from '@/components';
+import { Button, Divider, Typography } from '@/components';
 import { tokens } from '@/styles/tokens.ts';
 import { ProductSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
@@ -45,14 +45,7 @@ export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductD
           </Typography>
         </div>
       </Button>
-      <hr
-        className={css({
-          width: '100%',
-          height: '1px',
-          borderTop: `1px solid #ddd`,
-          margin: '10px 0',
-        })}
-      />
+      <Divider />
       <div
         className={flex({
           width: '100%',

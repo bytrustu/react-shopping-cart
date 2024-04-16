@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo, PropsWithChildren } from 'react';
 import { AiFillHeart } from 'react-icons/ai';
 import { css } from '@styled-system/css';
 import { flex, grid } from '@styled-system/patterns';
-import { Button, Typography } from '@/components';
+import { Button, Divider, IconButton, Typography } from '@/components';
 import { Product, ProductSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
@@ -64,7 +64,7 @@ const ProductTitle = () => {
       })}
     >
       <Typography variant="display">{product?.name}</Typography>
-      <hr className={css({ borderTop: '1px solid #ddd' })} />
+      <Divider />
     </header>
   );
 };
@@ -102,19 +102,7 @@ const ProductAction = () => {
         alignItems: 'center',
       })}
     >
-      <Button
-        variant="outline"
-        color="gray"
-        className={flex({
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '44px',
-          height: '44px',
-          padding: 0,
-        })}
-      >
-        <AiFillHeart />
-      </Button>
+      <IconButton icon={<AiFillHeart className={css({ width: '20px', height: '20px', color: 'teal200' })} />} />
       <Button variant="solid" color="teal" className={css({ width: 'calc(100% - 50px)' })} onClick={handleAddToCart}>
         장바구니 추가
       </Button>

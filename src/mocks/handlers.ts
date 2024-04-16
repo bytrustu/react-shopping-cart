@@ -43,24 +43,36 @@ export const handlers = [
     return HttpResponse.json({ message: '상품 정보가 없습니다.' }, { status: 404 });
   }),
 
-  http.post<PathParams, { data: number[] }>('/carts', async ({ request }) => {
-    const { data } = await request.json();
-    const newCarts = data.reduce((acc: Cart[], id) => {
-      const product = allProducts.get(id);
-      if (product) {
-        acc.push({
-          ...product,
-          quantity: 1,
-        });
+  http.post<PathParams, { data: Cart[] }>('/carts', async ({ request }) => {
+    const { data: productIds } = await request.json();
+
+    const newCarts = productIds.reduce((acc: Cart[], cart) => {
+      const product = allProducts.get(cart.id);
+      if (!product) {
+        return acc;
       }
+
+      const existingCart = acc.find((cart) => cart.id === product.id);
+      if (existingCart) {
+        return acc;
+      }
+
+      acc.push({ ...product, quantity: 1 });
       return acc;
     }, []);
+
     allCarts = newCarts;
     return HttpResponse.json(newCarts, { status: 201 });
   }),
   http.post<PathParams, { data: Cart }>('/cart', async ({ request }) => {
     await delay(SERVER_DELAY_MS);
     const { data: newCart } = await request.json();
+
+    const existingCart = allCarts.find((cart) => cart.id === newCart.id);
+    if (existingCart) {
+      return HttpResponse.json(existingCart);
+    }
+
     allCarts.push(newCart);
     return HttpResponse.json(newCart, { status: 201 });
   }),

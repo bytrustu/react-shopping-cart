@@ -6,6 +6,8 @@ export type OrderDetail = z.infer<typeof OrderDetailSchema>;
 
 export const OrderSchema = z.object({
   id: z.number(),
-  orderDetails: z.array(OrderDetailSchema),
+  products: z.array(OrderDetailSchema),
+  totalPrice: z.number(),
+  timestamp: z.number(),
 });
 export type Order = z.infer<typeof OrderSchema>;

@@ -3,9 +3,11 @@
  */
 
 export * from './Button/index';
+export * from './Divider/index';
 export * from './Empty/index';
 export * from './GlobalNavigation/index';
 export * from './Layout/index';
+export * from './OrderHistory/index';
 export * from './Overlay/index';
 export * from './Product/index';
 export * from './ProductDetail/index';
