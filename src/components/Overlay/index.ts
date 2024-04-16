@@ -3,3 +3,4 @@
  */
 
 export * from './Alert';
+export * from './Overlay';

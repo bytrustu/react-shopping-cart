@@ -1,5 +1,5 @@
 import { css } from '@styled-system/css';
-import { Button, Typography } from '@/components';
+import { Button, Overlay, Typography } from '@/components';
 
 type AlertProps = {
   message: string;
@@ -10,7 +10,7 @@ type AlertProps = {
 };
 
 export const Alert = ({ message, confirmText = '확인', cancelText = '취소', resolve, close }: AlertProps) => (
-  <div className={overlayStyles}>
+  <Overlay>
     <article className={modalStyles}>
       <Typography variant="subtitle" className={messageStyles}>
         {message}
@@ -40,21 +40,8 @@ export const Alert = ({ message, confirmText = '확인', cancelText = '취소', 
         </Button>
       </section>
     </article>
-  </div>
+  </Overlay>
 );
-
-const overlayStyles = css({
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  zIndex: 1000,
-});
 
 const modalStyles = css({
   position: 'absolute',
