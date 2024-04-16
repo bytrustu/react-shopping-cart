@@ -116,7 +116,7 @@ const ProductAction = () => {
         <AiFillHeart />
       </Button>
       <Button variant="solid" color="teal" className={css({ width: 'calc(100% - 50px)' })} onClick={handleAddToCart}>
-        Add to Cart
+        장바구니 추가
       </Button>
     </div>
   );

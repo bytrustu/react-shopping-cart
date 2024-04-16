@@ -4,6 +4,7 @@
 
 export * from './Alert/index';
 export * from './Button/index';
+export * from './Empty/index';
 export * from './GlobalNavigation/index';
 export * from './Layout/index';
 export * from './Product/index';
