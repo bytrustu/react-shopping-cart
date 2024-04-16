@@ -1,137 +1,168 @@
-import { PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo, PropsWithChildren } from 'react';
 import { AiFillHeart } from 'react-icons/ai';
-import Skeleton from 'react-loading-skeleton';
 import { css } from '@styled-system/css';
 import { flex, grid } from '@styled-system/patterns';
 import { Button, Typography } from '@/components';
-import { Product } from '@/types';
+import { Product, ProductSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
-type ProductImageProps = Partial<Pick<Product, 'imageUrl' | 'name'>>;
+type ProductDetailProps = PropsWithChildren<{
+  product?: Product;
+  addToCart: (id: number) => void;
+  loading?: boolean;
+}>;
 
-const ProductImage = ({ imageUrl, name }: ProductImageProps) => (
-  <figure>
-    <img
-      className={css({
-        width: {
-          base: '100%',
-          md: 'auto',
-        },
-      })}
-      src={imageUrl}
-      alt={name}
-    />
-  </figure>
-);
+type ProductDetailContextType = Pick<ProductDetailProps, 'product' | 'addToCart'> | undefined;
 
-type ProductTitleProps = Partial<Pick<Product, 'name'>>;
+const ProductDetailContext = createContext<ProductDetailContextType>(undefined);
 
-const ProductTitle = ({ name }: ProductTitleProps) => (
-  <header
-    className={flex({
-      flexDirection: 'column',
-      gap: '10px',
-    })}
-  >
-    <Typography variant="display">{name}</Typography>
-    <hr className={css({ borderTop: '1px solid #ddd' })} />
-  </header>
-);
+const ProductDetailProvider = ({ product, addToCart, children }: ProductDetailProps) => {
+  const value = useMemo(() => ({ product, addToCart }), [product, addToCart]);
 
-type ProductPriceProps = Partial<Pick<Product, 'price'>>;
-
-const ProductPrice = ({ price }: ProductPriceProps) => (
-  <div
-    className={flex({
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    })}
-  >
-    <Typography variant="title">금액</Typography>
-    <Typography variant="headline">{formatNumberWithCommas(price ?? 0)}</Typography>
-  </div>
-);
-
-type ProductActionProps = {
-  onAddToCart: () => void;
+  return <ProductDetailContext.Provider value={value}>{children}</ProductDetailContext.Provider>;
 };
 
-const ProductAction = ({ onAddToCart }: ProductActionProps) => (
-  <div
-    className={flex({
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    })}
-  >
-    <Button
-      variant="outline"
-      color="gray"
-      className={flex({
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '44px',
-        height: '44px',
-        padding: 0,
+const useProductDetail = () => {
+  const context = useContext(ProductDetailContext);
+  if (!context) {
+    throw new Error('ProductDetail 컴포넌트는 ProductDetail.Root 컴포넌트 내부에서 사용되어야 합니다.');
+  }
+
+  return context;
+};
+
+const ProductImage = () => {
+  const { product } = useProductDetail();
+
+  ProductSchema.parse(product);
+
+  return (
+    <figure
+      className={css({
+        outline: '1px solid #ddd',
+        borderRadius: '4px',
       })}
     >
-      <AiFillHeart />
-    </Button>
-    <Button variant="solid" color="teal" className={css({ width: 'calc(100% - 50px)' })} onClick={onAddToCart}>
-      장바구니
-    </Button>
-  </div>
-);
-
-type ProductInfoProps = Pick<Product, 'name' | 'price'> & {
-  onAddToCart: () => void;
+      <img
+        className={css({
+          width: '100%',
+        })}
+        src={product?.imageUrl}
+        alt={product?.name}
+      />
+    </figure>
+  );
 };
 
-const ProductInfo = ({ name, price, onAddToCart }: ProductInfoProps) => (
-  <section
+const ProductTitle = () => {
+  const { product } = useProductDetail();
+  return (
+    <header
+      className={flex({
+        flexDirection: 'column',
+        gap: '10px',
+      })}
+    >
+      <Typography variant="display">{product?.name}</Typography>
+      <hr className={css({ borderTop: '1px solid #ddd' })} />
+    </header>
+  );
+};
+
+const ProductPrice = () => {
+  const { product } = useProductDetail();
+  const priceFormatted = `${formatNumberWithCommas(product?.price || 0)} 원`;
+  return (
+    <div
+      className={flex({
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: '40px',
+      })}
+    >
+      <Typography variant="title">Price</Typography>
+      <Typography variant="headline">{priceFormatted}</Typography>
+    </div>
+  );
+};
+
+const ProductAction = () => {
+  const { addToCart, product } = useProductDetail();
+  const handleAddToCart = () => {
+    const productId = ProductSchema.pick({ id: true }).parse(product).id;
+    addToCart(productId);
+  };
+
+  ProductSchema.parse(product);
+
+  return (
+    <div
+      className={flex({
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      })}
+    >
+      <Button
+        variant="outline"
+        color="gray"
+        className={flex({
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '44px',
+          height: '44px',
+          padding: 0,
+        })}
+      >
+        <AiFillHeart />
+      </Button>
+      <Button variant="solid" color="teal" className={css({ width: 'calc(100% - 50px)' })} onClick={handleAddToCart}>
+        Add to Cart
+      </Button>
+    </div>
+  );
+};
+
+const ProductInfo = () => (
+  <article
     className={flex({
       flexDirection: 'column',
       justifyContent: 'space-between',
       padding: '4px',
     })}
   >
-    <ProductTitle name={name} />
+    <ProductTitle />
     <div
       className={flex({
         flexDirection: 'column',
         gap: '10px',
-        marginTop: '20px',
       })}
     >
-      <ProductPrice price={price} />
-      <ProductAction onAddToCart={onAddToCart} />
+      <ProductPrice />
+      <ProductAction />
     </div>
-  </section>
+  </article>
 );
 
-type ProductDetailProps = {
-  loading?: boolean;
-};
-export const ProductDetail = ({ children, loading }: PropsWithChildren<ProductDetailProps>) => (
-  <main
-    className={grid({
-      gridTemplateColumns: {
-        base: 'repeat(1, minmax(0, 1fr))',
-        md: 'repeat(2, minmax(0, 1fr))',
-      },
-    })}
-  >
-    {loading ? (
-      <>
-        <Skeleton width="500px" height="500px" />
-        <Skeleton width="575px" height="500px" />
-      </>
-    ) : null}
-    {children}
-  </main>
+export const ProductDetail = ({ product, addToCart, children }: ProductDetailProps) => (
+  <ProductDetailProvider product={product} addToCart={addToCart}>
+    <main
+      className={grid({
+        gridTemplateColumns: {
+          base: 'repeat(1, minmax(0, 1fr))',
+          md: 'repeat(2, minmax(0, 1fr))',
+        },
+        gap: {
+          base: '20px',
+          md: '100px',
+        },
+      })}
+    >
+      {children}
+    </main>
+  </ProductDetailProvider>
 );
 
 ProductDetail.Root = ProductDetail;
 ProductDetail.Image = ProductImage;
 ProductDetail.Info = ProductInfo;
-
 ProductDetail.displayName = 'ProductDetail';
