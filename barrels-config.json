@@ -1,0 +1,19 @@
+{
+  "delete": true,
+  "directory": [
+    "./src/types",
+    "./src/utils",
+    "./src/components",
+    "./src/pages",
+    "./src/queries",
+    "./src/hooks",
+    "./src/constants"
+  ],
+  "exclude": [
+    ".spec.tsx",
+    ".stories.tsx",
+    "vite-env"
+  ],
+  "location": "all",
+  "singleQuotes": true
+}
