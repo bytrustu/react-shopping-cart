@@ -2,6 +2,8 @@ import { AiFillHeart } from 'react-icons/ai';
 import { BsDot } from 'react-icons/bs';
 import { CiReceipt } from 'react-icons/ci';
 import { PiShoppingCartSimpleLight } from 'react-icons/pi';
+import Skeleton from 'react-loading-skeleton';
+import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
 import {
   orderHeaderStyle,
@@ -24,30 +26,39 @@ import { Order } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
 type OrderHistoryProps = {
-  orders: Order[];
+  values?: Order[];
+  loading?: boolean;
 };
 type OrderHeaderProps = {
-  order: Order;
-  totalPrice: number;
+  value: Order;
+  price: number;
 };
 type OrderProductsProps = {
-  products: Order['products'];
+  values: Order['products'];
 };
 type OrderProductProps = {
-  product: Order['products'][number];
+  value: Order['products'][number];
 };
 
-export const OrderHistory = ({ orders }: OrderHistoryProps) => {
-  if (orders.length === 0) {
+export const OrderHistory = ({ values, loading }: OrderHistoryProps) => {
+  if (loading) {
+    return (
+      <div>
+        <Skeleton width="100%" height="83px" />
+        <Skeleton width="100%" height="380px" className={css({ marginTop: '10px' })} />
+      </div>
+    );
+  }
+  if (values?.length === 0) {
     return <EmptyDescription icon={<CiReceipt />} description="주문이 존재하지 않습니다." />;
   }
 
   return (
     <div className={flex({ flexDirection: 'column', gap: '24px' })}>
-      {orders.map((order) => (
+      {values?.map((order) => (
         <div key={order.id}>
-          <OrderHeader order={order} totalPrice={order.totalPrice} />
-          <OrderProducts products={order.products} />
+          <OrderHeader value={order} price={order.totalPrice} />
+          <OrderProducts values={order.products} />
           <Divider />
         </div>
       ))}
@@ -55,10 +66,10 @@ export const OrderHistory = ({ orders }: OrderHistoryProps) => {
   );
 };
 
-const OrderHeader = ({ order, totalPrice }: OrderHeaderProps) => {
-  const formattedDate = new Date(order.timestamp).toLocaleDateString('ko-KR');
-  const formattedOrderId = order.id.toString();
-  const priceString = `${formatNumberWithCommas(totalPrice)}원`;
+const OrderHeader = ({ value, price }: OrderHeaderProps) => {
+  const formattedDate = new Date(value.timestamp).toLocaleDateString('ko-KR');
+  const formattedOrderId = value.id.toString();
+  const priceString = `${formatNumberWithCommas(price)}원`;
 
   return (
     <header className={orderHeaderStyle}>
@@ -85,32 +96,32 @@ const OrderHeader = ({ order, totalPrice }: OrderHeaderProps) => {
   );
 };
 
-const OrderProducts = ({ products }: OrderProductsProps) => (
+const OrderProducts = ({ values }: OrderProductsProps) => (
   <div className={orderProductsStyle}>
-    {products.map((product, index) => (
-      <OrderProduct key={index} product={product} />
+    {values.map((value, index) => (
+      <OrderProduct key={index} value={value} />
     ))}
   </div>
 );
 
-const OrderProduct = ({ product }: OrderProductProps) => {
+const OrderProduct = ({ value }: OrderProductProps) => {
   const addToCart = useAddToCart();
   return (
     <div className={orderProductStyle}>
-      <img src={product.imageUrl} alt="주문 상품 이미지" className={productImageStyle} />
+      <img src={value.imageUrl} alt="주문 상품 이미지" className={productImageStyle} />
       <div className={productInfoStyle}>
         <div className={productNameAndPriceStyle}>
-          <Typography variant="title">{product.name}</Typography>
+          <Typography variant="title">{value.name}</Typography>
           <div className={productPriceStyle}>
-            <Typography variant="body">{formatNumberWithCommas(product.price)}원</Typography>
+            <Typography variant="body">{formatNumberWithCommas(value.price)}원</Typography>
             <BsDot />
-            <Typography variant="body">{product.quantity}개</Typography>
+            <Typography variant="body">{value.quantity}개</Typography>
           </div>
         </div>
         <div className={productActionsStyle}>
           <IconButton
             icon={<PiShoppingCartSimpleLight className={cartIconStyle} />}
-            onClick={() => addToCart.open(product.id)}
+            onClick={() => addToCart.open(value.id)}
           />
           <IconButton icon={<AiFillHeart className={heartIconStyle} />} />
         </div>

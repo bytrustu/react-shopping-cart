@@ -86,8 +86,10 @@ export const handlers = [
     }
     return HttpResponse.json({ message: '장바구니에 상품 정보가 없습니다.' }, { status: 404 });
   }),
-
-  http.get('/orders', () => HttpResponse.json(Array.from(allOrders.values()))),
+  http.get('/orders', async () => {
+    await delay(SERVER_DELAY_MS);
+    return HttpResponse.json(Array.from(allOrders.values()).sort((a, b) => b.timestamp - a.timestamp));
+  }),
   http.post<PathParams, Order>('/orders', async ({ request }) => {
     const newOrder = await request.json();
     const orderId = allOrders.size + 1;
