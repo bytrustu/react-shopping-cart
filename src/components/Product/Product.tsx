@@ -15,7 +15,7 @@ export const ProductPropsScheme = ProductSchema.extend({
 export type ProductProps = z.infer<typeof ProductPropsScheme>;
 
 export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductDetail }: ProductProps) => {
-  const priceString = `${formatNumberWithCommas(price)} 원`;
+  const priceString = `${formatNumberWithCommas(price)}원`;
 
   return (
     <section
