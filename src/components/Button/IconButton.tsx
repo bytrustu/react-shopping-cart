@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactElement } from 'react';
 import { flex } from '@styled-system/patterns';
 import { Button } from '@/components';
 
 type IconButtonProps = {
-  icon: ReactNode;
+  icon: ReactElement;
   onClick?: () => void;
 };
 
