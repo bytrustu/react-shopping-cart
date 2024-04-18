@@ -28,21 +28,32 @@ const Logo = () => {
   );
 };
 
-export const GlobalNavigation = ({ menuPaths }: GlobalNavigationProps) => (
-  <nav className={navContainerStyles}>
-    <Logo />
-    <div className={flex({ gap: '20px' })}>
-      {menuPaths.map((menuPath) => (
-        <Link key={menuPath.path} to={menuPath.path}>
-          <Typography variant="headline" className={css({ color: 'white' })}>
-            {menuPath.title}
-          </Typography>
-        </Link>
-      ))}
-    </div>
-  </nav>
-);
+export const GlobalNavigation = ({ menuPaths }: GlobalNavigationProps) => {
+  if (!menuPaths || menuPaths.length === 0) {
+    return null;
+  }
 
+  return (
+    <nav className={navContainerStyles}>
+      <Logo />
+      <div className={flex({ gap: '20px' })}>
+        {menuPaths.map((menuPath) => {
+          if (!menuPath.title || !menuPath.path) {
+            return null;
+          }
+
+          return (
+            <Link key={menuPath.path} to={menuPath.path}>
+              <Typography variant="headline" className={css({ color: 'white' })}>
+                {menuPath.title}
+              </Typography>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+};
 const navContainerStyles = css({
   display: 'flex',
   flexDirection: 'row',
