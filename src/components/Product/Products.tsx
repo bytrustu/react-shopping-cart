@@ -2,7 +2,7 @@ import { PiBowlFoodDuotone } from 'react-icons/pi';
 import { z } from 'zod';
 import { grid } from '@styled-system/patterns';
 import { Product } from './Product';
-import { ProductSkeleton, EmptyDescription } from '@/components';
+import { EmptyDescription, ProductSkeleton } from '@/components';
 import { ProductSchema } from '@/types';
 
 const ProductsPropsScheme = z.object({
@@ -31,8 +31,21 @@ export const Products = ({ values, loading = false, addCart, moveToProductDetail
       {values?.map((product) => (
         <Product key={product.id} {...product} addCart={addCart} moveToProductDetail={moveToProductDetail} />
       ))}
-      {loading && Array.from({ length: 8 }).map((_, index) => <ProductSkeleton key={index} />)}
+      {loading && <ProductsSkeleton />}
     </div>
+  </>
+);
+
+const ProductsSkeleton = () => (
+  <>
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
   </>
 );
 
