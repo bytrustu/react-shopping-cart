@@ -17,7 +17,13 @@ export const orderHeaderActionsStyle = flex({
 export const orderNumberStyle = css({ color: 'gray600' });
 export const orderProductsStyle = flex({ flexDirection: 'column', width: '100%', gap: '10px', marginTop: '10px' });
 export const orderProductStyle = flex({ gap: '10px' });
-export const productImageStyle = css({ width: '120px', height: '120px', objectFit: 'cover', borderRadius: '4px' });
+export const productImageStyle = css({
+  width: '120px',
+  height: '120px',
+  flex: '1 0 120px',
+  objectFit: 'cover',
+  borderRadius: '4px',
+});
 export const productInfoStyle = flex({
   width: '100%',
   justifyContent: 'space-between',
