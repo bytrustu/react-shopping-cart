@@ -13,7 +13,6 @@ export const Image = ({ className, alt, ...props }: ImageProps) => (
         outline: '1px solid #d1d1d1',
       }),
     )}
-    alt={alt}
     {...props}
   />
 );

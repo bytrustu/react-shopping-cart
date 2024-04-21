@@ -9,7 +9,6 @@ type OrderStore = {
   setOrder: (order: Order) => void;
   setOrders: (orders: Order[]) => void;
   getOrderById: (orderId: number) => Order | undefined;
-  isPaid: (orderId: number) => boolean;
 };
 
 export const useOrderStore = create<OrderStore>()(
@@ -33,11 +32,6 @@ export const useOrderStore = create<OrderStore>()(
       },
 
       getOrderById: (orderId) => get().orders.find((order) => order.id === orderId),
-
-      isPaid: (orderId) => {
-        const order = get().getOrderById(orderId);
-        return Boolean(order?.payment);
-      },
     }),
     {
       name: LOCAL_STORAGE_ORDER_KEY,
