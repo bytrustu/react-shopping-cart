@@ -5,6 +5,8 @@ export const ProductSchema = z.object({
   name: z.string(),
   price: z.number(),
   imageUrl: z.string(),
+  category: z.string(),
+  liked: z.boolean()?.optional(),
 });
 
 export const ProductsRequestParamScheme = z.object({

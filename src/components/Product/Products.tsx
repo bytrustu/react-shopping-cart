@@ -20,7 +20,7 @@ export const Products = ({ values, loading = false, addCart, moveToProductDetail
     <div
       className={grid({
         gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-        rowGap: '80px',
+        rowGap: '40px',
         columnGap: '40px',
         maxWidth: '1200px',
         '@media (max-width: 1024px)': {
@@ -29,7 +29,13 @@ export const Products = ({ values, loading = false, addCart, moveToProductDetail
       })}
     >
       {values?.map((product) => (
-        <Product key={product.id} {...product} addCart={addCart} moveToProductDetail={moveToProductDetail} />
+        <Product
+          key={product.id}
+          {...product}
+          liked={product.liked}
+          addCart={addCart}
+          moveToProductDetail={moveToProductDetail}
+        />
       ))}
       {loading && <ProductsSkeleton />}
     </div>

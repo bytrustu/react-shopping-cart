@@ -15,7 +15,7 @@ export const ProductSkeleton = () => (
       count={1}
       className={css({
         width: '100%',
-        height: '260px',
+        height: '335px',
       })}
     />
     <Skeleton

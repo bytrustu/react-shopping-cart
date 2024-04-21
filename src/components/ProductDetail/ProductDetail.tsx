@@ -1,8 +1,7 @@
 import { createContext, useContext, useMemo, PropsWithChildren } from 'react';
-import { AiFillHeart } from 'react-icons/ai';
 import { css } from '@styled-system/css';
 import { flex, grid } from '@styled-system/patterns';
-import { Button, Divider, IconButton, Typography } from '@/components';
+import { Button, Divider, Image, LikeIconButton, Typography } from '@/components';
 import { Product, ProductSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
@@ -43,7 +42,7 @@ const ProductImage = () => {
         borderRadius: '4px',
       })}
     >
-      <img
+      <Image
         className={css({
           width: '100%',
         })}
@@ -80,20 +79,20 @@ const ProductPrice = () => {
         marginTop: '40px',
       })}
     >
-      <Typography variant="title">Price</Typography>
+      <Typography variant="title">상품 가격</Typography>
       <Typography variant="headline">{priceFormatted}</Typography>
     </div>
   );
 };
 
 const ProductAction = () => {
-  const { addToCart, product } = useProductDetail();
+  const { product, addToCart } = useProductDetail();
   const handleAddToCart = () => {
     const productId = ProductSchema.pick({ id: true }).parse(product).id;
     addToCart(productId);
   };
 
-  ProductSchema.parse(product);
+  const validProduct = ProductSchema.pick({ id: true, liked: true }).parse(product);
 
   return (
     <div
@@ -102,7 +101,7 @@ const ProductAction = () => {
         alignItems: 'center',
       })}
     >
-      <IconButton icon={<AiFillHeart className={css({ width: '20px', height: '20px', color: 'teal200' })} />} />
+      <LikeIconButton productId={validProduct.id} liked={Boolean(validProduct?.liked)} />
       <Button variant="solid" color="teal" className={css({ width: 'calc(100% - 50px)' })} onClick={handleAddToCart}>
         장바구니 추가
       </Button>

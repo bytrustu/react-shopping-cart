@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { Products } from '@/components';
 import { useAddToCart, useProductsData } from '@/hooks';
+import { useScrollPosition } from '@/pages/useScrollPosition.ts';
 
 export const ProductsPage = () => {
   const navigate = useNavigate({ from: '/' });
@@ -14,12 +15,14 @@ export const ProductsPage = () => {
     });
   };
 
+  useScrollPosition('ProductsPage');
+
   return (
     <>
       <Products
         values={products.value}
         loading={products.loading}
-        addCart={addToCart.open}
+        addCart={addToCart.single}
         moveToProductDetail={moveToProductDetail}
       />
       {products.fetchedAfterMount && <div ref={products.ref} />}
