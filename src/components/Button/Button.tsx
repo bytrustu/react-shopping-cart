@@ -9,7 +9,6 @@ export type ButtonProps = PropsWithChildren<
   HTMLProps<HTMLButtonElement> & {
     variant?: ButtonVariant;
     colorScheme?: ButtonColorScheme;
-    className?: string;
   }
 >;
 
