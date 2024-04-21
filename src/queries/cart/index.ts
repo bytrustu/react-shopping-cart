@@ -3,5 +3,8 @@
  */
 
 export * from './useAddProductToCartMutation';
+export * from './useAddProductsToCartMutation';
 export * from './useCartsQuery';
+export * from './useClearCartMutation';
 export * from './useRemoveProductToCartMutation';
+export * from './useRemoveProductsToCartMutation';

@@ -5,4 +5,5 @@ export const QUERY_KEYS = {
   PRODUCT: generateQueryKey('products', 'item'),
   CARTS: generateQueryKey('carts', 'list'),
   ORDERS: generateQueryKey('orders', 'list'),
+  LIKES: generateQueryKey('likes', 'list'),
 };

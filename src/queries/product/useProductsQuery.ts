@@ -15,7 +15,7 @@ export const useProductsQuery = () => {
   };
 
   return useInfiniteQuery({
-    queryKey: QUERY_KEYS.PRODUCTS(initialPageParam),
+    queryKey: QUERY_KEYS.PRODUCTS({ limit: initialPageParam.limit }),
     queryFn: ({ pageParam = initialPageParam }) => fetchProducts(pageParam),
     getNextPageParam: (lastPage) => (lastPage.nextCursor ? { offset: lastPage.nextCursor, limit: 8 } : undefined),
     initialPageParam,
