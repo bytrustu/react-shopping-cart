@@ -21,3 +21,5 @@ export const EmptyDescription = ({ icon, description }: EmptyDescriptionProps) =
     <Typography variant="display">{description}</Typography>
   </div>
 );
+
+EmptyDescription.displayName = 'EmptyDescription';

@@ -36,7 +36,14 @@ export const GlobalNavigation = ({ menuPaths }: GlobalNavigationProps) => {
   return (
     <nav className={navContainerStyles}>
       <Logo />
-      <div className={flex({ gap: '20px' })}>
+      <div
+        className={flex({
+          gap: {
+            base: '10px',
+            sm: '20px',
+          },
+        })}
+      >
         {menuPaths.map((menuPath) => {
           if (!menuPath.title || !menuPath.path) {
             return null;
@@ -44,7 +51,16 @@ export const GlobalNavigation = ({ menuPaths }: GlobalNavigationProps) => {
 
           return (
             <Link key={menuPath.path} to={menuPath.path}>
-              <Typography variant="headline" className={css({ color: 'white' })}>
+              <Typography
+                variant="headline"
+                className={css({
+                  color: 'white',
+                  fontSize: {
+                    base: '15px',
+                    sm: '20px',
+                  },
+                })}
+              >
                 {menuPath.title}
               </Typography>
             </Link>
