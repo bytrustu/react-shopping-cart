@@ -1,7 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import { Products } from '@/components';
-import { useAddToCart, useProductsData } from '@/hooks';
-import { useScrollPosition } from '@/pages/useScrollPosition.ts';
+import { useAddToCart, useProductsData, useScrollPosition } from '@/hooks';
 
 export const ProductsPage = () => {
   const navigate = useNavigate({ from: '/' });
