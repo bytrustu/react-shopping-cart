@@ -38,4 +38,7 @@ export const tokens = {
       value: 'spin 1s linear infinite',
     },
   },
+  minWidth: {
+    min: { value: '375px' },
+  },
 } as const;
