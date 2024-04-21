@@ -4315,6 +4315,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xstate/react@npm:^4.1.0":
+  version: 4.1.1
+  resolution: "@xstate/react@npm:4.1.1"
+  dependencies:
+    use-isomorphic-layout-effect: "npm:^1.1.2"
+    use-sync-external-store: "npm:^1.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    xstate: ^5.11.0
+  peerDependenciesMeta:
+    xstate:
+      optional: true
+  checksum: 10c0/4687f1a97315612cc2e4833453a3614f1a6a656494680c7c4bee901141765ad4c5d6ed1a76f6cbacaa32f6b533eae67274b0c31bd688ba011c67475fd9c2708d
+  languageName: node
+  linkType: hard
+
 "@yarnpkg/esbuild-plugin-pnp@npm:^3.0.0-rc.10":
   version: 3.0.0-rc.15
   resolution: "@yarnpkg/esbuild-plugin-pnp@npm:3.0.0-rc.15"
@@ -9188,6 +9204,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"myfirstpackage-payments@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "myfirstpackage-payments@npm:0.2.0"
+  dependencies:
+    "@xstate/react": "npm:^4.1.0"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    xstate: "npm:^5.9.1"
+  checksum: 10c0/5379942c517a3ba60dbfd407b81b9b0d709fe379d839c9cb9039bd512a9e631e059adb9e66489bc7910a47103e6d8382a98181025824058954e0aae12d941ebd
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.3.7":
   version: 3.3.7
   resolution: "nanoid@npm:3.3.7"
@@ -10483,6 +10511,7 @@ __metadata:
     husky: "npm:^8.0.3"
     jsdom: "npm:^24.0.0"
     msw: "npm:^2.2.13"
+    myfirstpackage-payments: "npm:^0.2.0"
     prettier: "npm:^3.2.5"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -12212,6 +12241,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-isomorphic-layout-effect@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "use-isomorphic-layout-effect@npm:1.1.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/d8deea8b85e55ac6daba237a889630bfdbf0ebf60e9e22b6a78a78c26fabe6025e04ada7abef1e444e6786227d921e648b2707db8b3564daf757264a148a6e23
+  languageName: node
+  linkType: hard
+
 "use-sync-external-store@npm:1.2.0, use-sync-external-store@npm:^1.2.0":
   version: 1.2.0
   resolution: "use-sync-external-store@npm:1.2.0"
@@ -12673,6 +12714,13 @@ __metadata:
   version: 2.2.0
   resolution: "xmlchars@npm:2.2.0"
   checksum: 10c0/b64b535861a6f310c5d9bfa10834cf49127c71922c297da9d4d1b45eeaae40bf9b4363275876088fbe2667e5db028d2cd4f8ee72eed9bede840a67d57dab7593
+  languageName: node
+  linkType: hard
+
+"xstate@npm:^5.9.1":
+  version: 5.11.0
+  resolution: "xstate@npm:5.11.0"
+  checksum: 10c0/8a911c2e9232a80812ee4d7c010bbc3e16c540d6380da0bfe39e7b826ac9627922e39fb745ef37d979bbefccdc6c56fc10f7d1504708a20cc28d758f2ecbb55d
   languageName: node
   linkType: hard
 
