@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { enableMocking } from './mocks/enableMocking';
+import { useSyncWithServer } from '@/hooks';
 import { routeTree } from '@/routeTree.gen';
 import './index.css';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -29,7 +30,13 @@ enableMocking().then(() => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <App />
       </QueryClientProvider>
     </React.StrictMode>,
   );
 });
+
+const App = () => {
+  useSyncWithServer();
+  return null;
+};
