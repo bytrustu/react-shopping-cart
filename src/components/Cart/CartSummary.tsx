@@ -1,47 +1,100 @@
-import { PropsWithChildren } from 'react';
+import { memo, PropsWithChildren } from 'react';
+import { FaCirclePlus } from 'react-icons/fa6';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
-import { Divider, Image, Typography } from '@/components';
+import { Button, Divider, Image, Typography } from '@/components';
+import { Product } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
 type CartSummaryProps = {
   totalPrice: number;
   productImages: string[];
+  curationProducts?: Product[];
+  addCartProduct?: (product: Product) => void;
 };
 
-export const CartSummary = ({ children, totalPrice = 0, productImages = [] }: PropsWithChildren<CartSummaryProps>) => {
-  const headingString = `전체 상품 (${productImages.length})`;
-  const totalPriceString = `${formatNumberWithCommas(totalPrice)}원`;
+export const CartSummary = memo(
+  ({
+    children,
+    totalPrice = 0,
+    productImages = [],
+    curationProducts,
+    addCartProduct,
+  }: PropsWithChildren<CartSummaryProps>) => {
+    const headingString = `전체 상품 (${productImages.length})`;
+    const totalPriceString = `${formatNumberWithCommas(totalPrice)}원`;
 
-  return (
-    <section className={cartSummaryStyle}>
-      <div className={cartSummaryContentStyle}>
-        <div className={productImagesStyle}>
-          <Typography as="h3" variant="body">
-            {headingString}
-          </Typography>
-          <div className={productImageWrapperStyle}>
-            {productImages.map((imageUrl) => (
-              <Image key={imageUrl} src={imageUrl} alt="상품 이미지" className={productImageStyle} />
-            ))}
+    return (
+      <section className={cartSummaryStyle}>
+        <div className={cartSummaryContentStyle}>
+          <div className={productImagesStyle}>
+            <Typography as="h3" variant="body">
+              {headingString}
+            </Typography>
+            <div className={productImageWrapperStyle}>
+              {productImages.map((imageUrl) => (
+                <Image key={imageUrl} src={imageUrl} alt="상품 이미지" className={productImageStyle} />
+              ))}
+            </div>
+            <Typography as="h3" variant="body" className={css({ marginTop: '20px' })}>
+              함께 담으면 좋을 상품 😎
+            </Typography>
+            <div className={productImageWrapperStyle}>
+              {curationProducts?.map((product) => (
+                <CurationProductButton key={product.id} product={product} addCartProduct={addCartProduct} />
+              ))}
+            </div>
+            <Divider />
           </div>
-          <Divider />
+
+          <div className={priceInfoStyle}>
+            <Typography className={expectedPaymentStyle} variant="body">
+              결제금액
+            </Typography>
+            <Typography variant="title" className={totalPriceStyle}>
+              {totalPriceString}
+            </Typography>
+          </div>
         </div>
-        <div className={priceInfoStyle}>
-          <Typography className={expectedPaymentStyle} variant="body">
-            결제금액
-          </Typography>
-          <Typography variant="title" className={totalPriceStyle}>
-            {totalPriceString}
-          </Typography>
-        </div>
-      </div>
-      {children}
-    </section>
-  );
-};
+        {children}
+      </section>
+    );
+  },
+);
 
 CartSummary.displayName = 'CartSummary';
+
+const CurationProductButton = ({
+  product,
+  addCartProduct,
+}: { product: Product } & Pick<CartSummaryProps, 'addCartProduct'>) => (
+  <Button
+    key={product.id}
+    variant="ghost"
+    style={{ padding: 0, margin: 0, position: 'relative' }}
+    onClick={() => addCartProduct?.(product)}
+  >
+    <Image src={product.imageUrl} alt="상품 이미지" className={productImageStyle} />
+    <div
+      className={css({
+        position: 'absolute',
+        borderRadius: '50%',
+        backgroundColor: 'white',
+        width: '20px',
+        height: '20px',
+        bottom: '4px',
+        right: '4px',
+      })}
+    >
+      <FaCirclePlus
+        className={css({
+          width: '20px',
+          height: '20px',
+        })}
+      />
+    </div>
+  </Button>
+);
 
 const cartSummaryStyle = css({
   position: {

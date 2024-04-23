@@ -3,6 +3,7 @@
  */
 
 export * from './useAddProductLikeMutation';
+export * from './useProductCurationQuery';
 export * from './useProductQuery';
 export * from './useProductsQuery';
 export * from './useRemoveProductLikeMutation';

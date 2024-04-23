@@ -2,6 +2,7 @@ import { BiTrash } from 'react-icons/bi';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
 import { IconButton, QuantityCounter, Typography, Image, Checkbox, LikeIconButton } from '@/components';
+import { CART_MAX_QUANTITY_VALUE } from '@/constants';
 import { useAlert } from '@/hooks';
 import { useRemoveProductFromCartMutation } from '@/queries';
 import { useCartStore } from '@/store';
@@ -124,7 +125,7 @@ const ProductInfo = ({
           <QuantityCounter
             value={quantity}
             min={1}
-            max={20}
+            max={CART_MAX_QUANTITY_VALUE}
             increment={() => onQuantityChange(quantity + 1)}
             decrement={() => onQuantityChange(quantity - 1)}
           />

@@ -185,4 +185,47 @@ export const handlers = [
     });
     return HttpResponse.json(Array.from(allProducts.values()));
   }),
+
+  http.get('/curation', async () => {
+    const cartProducts = Array.from(allCarts.values());
+    const cartCategories = [...new Set(cartProducts.map((cart) => cart.product.category))];
+    const likedProducts = Array.from(allProducts.values()).filter((product) => product.liked);
+
+    const allProductsArray = Array.from(allProducts.values());
+    const productsInCart = new Set(cartProducts.map((cart) => cart.product.id));
+
+    const curatedProducts = cartCategories.slice(0, 3).reduce((products, category) => {
+      const categoryProducts = allProductsArray.filter(
+        (product) => product.category === category && !productsInCart.has(product.id),
+      );
+      return [...products, ...categoryProducts.slice(0, 3)];
+    }, [] as Product[]);
+
+    const likedProductsNotInCart = likedProducts.filter((product) => !productsInCart.has(product.id));
+    const selectedLikedProducts = likedProductsNotInCart.slice(0, 3);
+    curatedProducts.push(...selectedLikedProducts);
+
+    const remainingProducts = allProductsArray.filter(
+      (product) => !productsInCart.has(product.id) && !curatedProducts.includes(product),
+    );
+    const randomProducts = getRandomElements(remainingProducts, 10 - curatedProducts.length);
+    const finalCuratedProducts = [...curatedProducts, ...randomProducts].slice(0, 10);
+
+    return HttpResponse.json(finalCuratedProducts);
+  }),
 ];
+
+const getRandomElements = <T>(array: T[], count: number): T[] => {
+  const shuffled = array.slice();
+  let i = array.length;
+  const min = i - count;
+  let temp: T;
+  let index: number;
+  while (i-- > min) {
+    index = Math.floor((i + 1) * Math.random());
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  return shuffled.slice(min);
+};

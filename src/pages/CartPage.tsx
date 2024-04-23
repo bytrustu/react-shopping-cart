@@ -4,9 +4,9 @@ import { flex } from '@styled-system/patterns';
 import { useNavigate } from '@tanstack/react-router';
 import { Button, CartHeader, CartOrderProduct, CartSummary, EmptyDescription, Typography } from '@/components';
 import { useAlert, useCartProducts } from '@/hooks';
-import { useAddOrderMutation, useRemoveProductsFromCartMutation } from '@/queries';
+import { useAddOrderMutation, useProductCurationQuery, useRemoveProductsFromCartMutation } from '@/queries';
 import { useCartStore } from '@/store';
-import { Order } from '@/types';
+import { Order, Product } from '@/types';
 
 export const CartPage = () => {
   const cartStore = useCartStore();
@@ -31,6 +31,7 @@ const CartList = () => {
   const cartStore = useCartStore();
 
   const cartProducts = useCartProducts();
+  const curationProducts = useProductCurationQuery();
   const addOrderMutation = useAddOrderMutation();
   const removeProductsToCartMutation = useRemoveProductsFromCartMutation();
 
@@ -72,6 +73,10 @@ const CartList = () => {
         moveToOrderPayment(newOrder.id);
       },
     });
+  };
+
+  const addCartProduct = (product: Product) => {
+    cartStore.addProduct(product, 1);
   };
 
   const removeCartProducts = (productIds: number[]) => {
@@ -118,7 +123,12 @@ const CartList = () => {
             <CartOrderProduct key={cart.product.id} value={cart} />
           ))}
         </ul>
-        <CartSummary totalPrice={cartProducts.totalPrice} productImages={checkedCartProductImages}>
+        <CartSummary
+          totalPrice={cartProducts.totalPrice}
+          productImages={checkedCartProductImages}
+          curationProducts={curationProducts.data}
+          addCartProduct={addCartProduct}
+        >
           <Button
             variant="solid"
             style={{ borderRadius: 0, width: '100%' }}

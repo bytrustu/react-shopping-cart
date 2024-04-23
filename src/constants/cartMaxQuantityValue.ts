@@ -1,0 +1,1 @@
+export const CART_MAX_QUANTITY_VALUE = 20;

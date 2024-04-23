@@ -16,8 +16,22 @@ export const useAddProductToCartMutation = ({ onMutate }: UseAddProductToCartMut
     onMutate: async (cart) => {
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.CARTS() });
       const previousCarts = queryClient.getQueryData<Cart[]>(QUERY_KEYS.CARTS()) || [];
+      const existingCart = previousCarts.find((c) => c.product.id === cart.product.id);
 
-      queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), [...previousCarts, cart]);
+      if (existingCart) {
+        const updatedCarts = previousCarts.map((c) => {
+          if (c.product.id === cart.product.id && cart.quantity <= 20) {
+            return {
+              ...c,
+              quantity: c.quantity + cart.quantity,
+            };
+          }
+          return c;
+        });
+
+        queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), updatedCarts);
+        return updatedCarts;
+      }
       onMutate?.();
       return previousCarts;
     },
