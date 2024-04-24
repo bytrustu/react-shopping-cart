@@ -6,14 +6,15 @@ import { Cart, Product } from '@/types';
 type CartState = {
   cartProducts: Cart[];
   addProduct: (product: Product, quantity?: number) => void;
-  addCartProducts: (products: Cart[]) => void;
-  setCartProducts: (products: Cart[]) => void;
+  setCartProducts: (cartProducts: Cart[]) => void;
   removeProduct: (productId: number) => void;
   removeProducts: (productIds: number[]) => void;
   updateProductQuantity: (productId: number, quantity: number) => void;
   toggleProductCheck: (productId: number) => void;
   toggleAllProductsCheck: () => void;
+  clearCart: () => void;
   getCartProduct: (productId: number) => Cart | undefined;
+  getCartProducts: () => Cart[];
 };
 
 export const useCartStore = create<CartState>()(
@@ -35,14 +36,8 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      addCartProducts: (products) => {
-        set((state) => ({
-          cartProducts: [...state.cartProducts, ...products],
-        }));
-      },
-
-      setCartProducts: (products) => {
-        set({ cartProducts: products });
+      setCartProducts: (cartProducts) => {
+        set({ cartProducts });
       },
 
       removeProduct: (productId) => {
@@ -51,11 +46,12 @@ export const useCartStore = create<CartState>()(
         }));
       },
 
-      removeProducts: () => {
-        get().cartProducts.forEach((item) => {
-          if (item.checked) {
-            get().removeProduct(item.product.id);
-          }
+      removeProducts: (productIds: number[]) => {
+        if (!productIds || productIds.length === 0) {
+          return;
+        }
+        productIds.forEach((productId) => {
+          get().removeProduct(productId);
         });
       },
 
@@ -82,7 +78,13 @@ export const useCartStore = create<CartState>()(
         }));
       },
 
+      clearCart: () => {
+        set({ cartProducts: [] });
+      },
+
       getCartProduct: (productId) => get().cartProducts.find((item) => item.product.id === productId),
+
+      getCartProducts: () => get().cartProducts,
     }),
     {
       name: LOCAL_STORAGE_CART_KEY,
