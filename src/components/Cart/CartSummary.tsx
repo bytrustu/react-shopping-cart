@@ -36,14 +36,18 @@ export const CartSummary = memo(
                 <Image key={imageUrl} src={imageUrl} alt="상품 이미지" className={productImageStyle} />
               ))}
             </div>
-            <Typography as="h3" variant="body" className={css({ marginTop: '20px' })}>
-              함께 담으면 좋을 상품 😎
-            </Typography>
-            <div className={productImageWrapperStyle}>
-              {curationProducts?.map((product) => (
-                <CurationProductButton key={product.id} product={product} addCartProduct={addCartProduct} />
-              ))}
-            </div>
+            {curationProducts && (
+              <>
+                <Typography as="h3" variant="body" className={css({ marginTop: '20px' })}>
+                  함께 담으면 좋을 상품 😎
+                </Typography>
+                <div className={productImageWrapperStyle}>
+                  {curationProducts.map((product) => (
+                    <CurationProduct key={product.id} product={product} addCartProduct={addCartProduct} />
+                  ))}
+                </div>
+              </>
+            )}
             <Divider />
           </div>
 
@@ -64,7 +68,7 @@ export const CartSummary = memo(
 
 CartSummary.displayName = 'CartSummary';
 
-const CurationProductButton = ({
+const CurationProduct = ({
   product,
   addCartProduct,
 }: { product: Product } & Pick<CartSummaryProps, 'addCartProduct'>) => (
