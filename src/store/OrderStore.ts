@@ -23,8 +23,13 @@ export const useOrderStore = create<OrderStore>()(
       },
 
       setOrder: (newOrder) => {
-        const newOrders = get().orders.map((order) => (order.id === newOrder.id ? newOrder : order));
-        set({ orders: newOrders });
+        const existingOrder = get().getOrderById(newOrder.id);
+        if (existingOrder) {
+          const newOrders = get().orders.map((order) => (order.id === newOrder.id ? newOrder : order));
+          set({ orders: newOrders });
+          return;
+        }
+        set({ orders: [newOrder] });
       },
 
       setOrders: (orders) => {
