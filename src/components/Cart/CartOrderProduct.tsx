@@ -14,7 +14,7 @@ type CartProductProps = {
 };
 
 type ProductImageProps = {
-  orderProcess: boolean;
+  processedOrder: boolean;
   checked?: boolean;
   imageUrl: string;
   onCheckboxChange: () => void;
@@ -38,7 +38,7 @@ export const CartOrderProduct = ({ value }: CartProductProps) => {
   const removeProductToCartMutation = useRemoveProductFromCartMutation();
 
   const productPrice = `${formatNumberWithCommas(product.price * quantity)}원`;
-  const isOrderProcess = checked === undefined;
+  const processedOrder = checked === undefined;
 
   const handleCheckboxChange = () => {
     cartStore.toggleProductCheck(product.id);
@@ -63,7 +63,7 @@ export const CartOrderProduct = ({ value }: CartProductProps) => {
   return (
     <li className={cartProductListItemStyle}>
       <ProductImage
-        orderProcess={isOrderProcess}
+        processedOrder={processedOrder}
         checked={checked}
         imageUrl={product.imageUrl}
         onCheckboxChange={handleCheckboxChange}
@@ -72,7 +72,7 @@ export const CartOrderProduct = ({ value }: CartProductProps) => {
         name={product.name}
         price={productPrice}
         quantity={quantity}
-        orderProcess={isOrderProcess}
+        orderProcess={processedOrder}
         liked={Boolean(product.liked)}
         productId={product.id}
         onDeleteCartProduct={handleDeleteCartProduct}
@@ -82,9 +82,9 @@ export const CartOrderProduct = ({ value }: CartProductProps) => {
   );
 };
 
-const ProductImage = ({ orderProcess, checked, imageUrl, onCheckboxChange }: ProductImageProps) => (
+const ProductImage = ({ processedOrder, checked, imageUrl, onCheckboxChange }: ProductImageProps) => (
   <div className={productImageContainerStyle}>
-    {!orderProcess ? (
+    {!processedOrder ? (
       <Checkbox checked={checked} onChange={onCheckboxChange} className={productImageCheckboxStyle} />
     ) : null}
     <Image src={imageUrl} alt="주문 상품 이미지" className={productImageStyle} />

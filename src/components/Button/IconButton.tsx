@@ -8,7 +8,7 @@ type IconButtonProps = HTMLProps<HTMLButtonElement> & {
   variant?: 'solid' | 'outline' | 'ghost';
 };
 
-export const IconButton = ({ className, icon, variant = 'outline', onClick }: IconButtonProps) => (
+export const IconButton = ({ className, icon, variant = 'outline', onClick, ...props }: IconButtonProps) => (
   <Button
     variant={variant}
     className={clsx(
@@ -25,6 +25,7 @@ export const IconButton = ({ className, icon, variant = 'outline', onClick }: Ic
     style={{
       padding: 0,
     }}
+    {...props}
   >
     {icon}
   </Button>

@@ -26,6 +26,7 @@ export const LikeIconButton = ({ productId, liked, ...props }: LikeIconButtonPro
           <AiOutlineHeart width="20px" height="20px" color="teal200" />
         )
       }
+      aria-label="찜 toggle 버튼"
       onClick={(e) => {
         e.stopPropagation();
         productLiked.toggle(productId, Boolean(liked));

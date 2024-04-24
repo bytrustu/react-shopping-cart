@@ -63,6 +63,7 @@ export const Product = ({ id, name, price = 0, imageUrl, liked, addCart, moveToP
           <LikeIconButton productId={id} liked={liked} />
           <IconButton
             variant="ghost"
+            aria-label="장바구니 추가 버튼"
             className={css({ width: '20px', height: '20px', padding: 0 })}
             icon={<PiShoppingCartSimpleLight size={24} color={tokens.colors.teal200.value} />}
             onClick={(e) => {
