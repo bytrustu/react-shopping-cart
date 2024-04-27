@@ -6,7 +6,7 @@ export const formatNumberWithCommas = (number: number): string => {
   return commaInsertedDigits.reverse().join('');
 };
 
-const insertCommasEveryThreeDigits = (digits: string[]): string[] => {
+export const insertCommasEveryThreeDigits = (digits: string[]): string[] => {
   const commaInsertedDigits = [...digits];
   let commaPosition = 3;
 

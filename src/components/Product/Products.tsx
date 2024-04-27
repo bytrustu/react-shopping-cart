@@ -2,7 +2,7 @@ import { PiBowlFoodDuotone } from 'react-icons/pi';
 import { z } from 'zod';
 import { grid } from '@styled-system/patterns';
 import { Product } from './Product';
-import { ProductSkeleton, EmptyDescription } from '@/components';
+import { EmptyDescription, ProductSkeleton } from '@/components';
 import { ProductSchema } from '@/types';
 
 const ProductsPropsScheme = z.object({
@@ -20,7 +20,7 @@ export const Products = ({ values, loading = false, addCart, moveToProductDetail
     <div
       className={grid({
         gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-        rowGap: '80px',
+        rowGap: '40px',
         columnGap: '40px',
         maxWidth: '1200px',
         '@media (max-width: 1024px)': {
@@ -29,10 +29,29 @@ export const Products = ({ values, loading = false, addCart, moveToProductDetail
       })}
     >
       {values?.map((product) => (
-        <Product key={product.id} {...product} addCart={addCart} moveToProductDetail={moveToProductDetail} />
+        <Product
+          key={product.id}
+          {...product}
+          liked={product.liked}
+          addCart={addCart}
+          moveToProductDetail={moveToProductDetail}
+        />
       ))}
-      {loading && Array.from({ length: 8 }).map((_, index) => <ProductSkeleton key={index} />)}
+      {loading && <ProductsSkeleton />}
     </div>
+  </>
+);
+
+const ProductsSkeleton = () => (
+  <>
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
+    <ProductSkeleton />
   </>
 );
 

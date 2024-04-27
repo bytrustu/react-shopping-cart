@@ -2,7 +2,7 @@ import { PiShoppingCartSimpleLight } from 'react-icons/pi';
 import { z } from 'zod';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
-import { Button, Divider, Typography } from '@/components';
+import { Button, Divider, Typography, Image, IconButton, LikeIconButton } from '@/components';
 import { tokens } from '@/styles/tokens.ts';
 import { ProductSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
@@ -14,8 +14,8 @@ export const ProductPropsScheme = ProductSchema.extend({
 
 export type ProductProps = z.infer<typeof ProductPropsScheme>;
 
-export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductDetail }: ProductProps) => {
-  const priceString = `${formatNumberWithCommas(price)} 원`;
+export const Product = ({ id, name, price = 0, imageUrl, liked, addCart, moveToProductDetail }: ProductProps) => {
+  const priceString = `${formatNumberWithCommas(price)}원`;
 
   return (
     <section
@@ -28,8 +28,8 @@ export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductD
         borderRadius: '4px',
       })}
     >
-      <Button variant="ghost" className={css({ padding: 0 })} onClick={() => moveToProductDetail(id)}>
-        <img src={imageUrl} alt={name} />
+      <Button variant="ghost" style={{ padding: 0 }} onClick={() => moveToProductDetail(id)}>
+        <Image style={{ outline: 'none' }} src={imageUrl} alt={name} />
         <div
           className={css({
             width: '100%',
@@ -55,16 +55,23 @@ export const Product = ({ id, name, price = 0, imageUrl, addCart, moveToProductD
         })}
       >
         <Typography variant="body">{priceString}</Typography>
-        <Button
-          variant="ghost"
-          className={css({ padding: 0 })}
-          onClick={(e) => {
-            e.stopPropagation();
-            addCart(id);
-          }}
+        <div
+          className={flex({
+            gap: '4px',
+          })}
         >
-          <PiShoppingCartSimpleLight size={24} color={tokens.colors.blue.value} />
-        </Button>
+          <LikeIconButton productId={id} liked={liked} />
+          <IconButton
+            variant="ghost"
+            aria-label="장바구니 추가 버튼"
+            className={css({ width: '20px', height: '20px', padding: 0 })}
+            icon={<PiShoppingCartSimpleLight size={24} color={tokens.colors.teal200.value} />}
+            onClick={(e) => {
+              e.stopPropagation();
+              addCart(id);
+            }}
+          />
+        </div>
       </div>
     </section>
   );

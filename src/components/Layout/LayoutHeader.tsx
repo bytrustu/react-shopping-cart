@@ -26,6 +26,7 @@ const headerStyles = css({
   alignItems: 'center',
   justifyContent: 'center',
   width: '100%',
+  minWidth: '375px',
   height: '60px',
   backgroundColor: 'teal200',
   zIndex: 'header',

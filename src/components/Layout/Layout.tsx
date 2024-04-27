@@ -10,6 +10,7 @@ export const Layout = ({ children }: PropsWithChildren) => (
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
+      minWidth: '375px',
       height: 'auto',
     })}
   >

@@ -36,24 +36,6 @@ export const Primary: Story = {
   },
 };
 
-export const WithVariantOutline: Story = {
-  args: {
-    variant: 'outline',
-  },
-};
-
-export const WithVariantGhost: Story = {
-  args: {
-    variant: 'ghost',
-  },
-};
-
-export const WithColorSchemeGray: Story = {
-  args: {
-    colorScheme: 'gray',
-  },
-};
-
 export const WithDisabled: Story = {
   args: {
     disabled: true,

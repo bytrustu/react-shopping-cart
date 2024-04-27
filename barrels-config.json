@@ -7,7 +7,8 @@
     "./src/pages",
     "./src/queries",
     "./src/hooks",
-    "./src/constants"
+    "./src/constants",
+    "./src/store"
   ],
   "exclude": [
     ".spec.tsx",

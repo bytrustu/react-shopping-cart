@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '../queryKeys.ts';
-import { LOCAL_STORAGE_CART_KEY } from '@/constants';
 import { Cart } from '@/types';
-import { http, localStorageUtil } from '@/utils';
+import { http } from '@/utils';
 
 export type UseRemoveProductFromCartMutation = {
   onMutate?: () => void;
@@ -20,7 +19,7 @@ export const useRemoveProductFromCartMutation = ({ onMutate }: UseRemoveProductF
 
       queryClient.setQueryData<Cart[]>(
         QUERY_KEYS.CARTS(),
-        (currentCarts) => currentCarts?.filter((cart) => cart.id !== cartId) || [],
+        (currentCarts) => currentCarts?.filter((cart) => cart.product.id !== cartId) || [],
       );
       onMutate?.();
       return previousCarts;
@@ -30,15 +29,8 @@ export const useRemoveProductFromCartMutation = ({ onMutate }: UseRemoveProductF
       queryClient.setQueryData(QUERY_KEYS.CARTS(), context);
     },
 
-    onSuccess: ({ id }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CARTS() });
-      const cartIds = localStorageUtil.getItem<number[]>(LOCAL_STORAGE_CART_KEY) || [];
-      if (cartIds?.includes(id)) {
-        localStorageUtil.setItem(
-          LOCAL_STORAGE_CART_KEY,
-          cartIds.filter((cartId) => cartId !== id),
-        );
-      }
     },
   });
 };

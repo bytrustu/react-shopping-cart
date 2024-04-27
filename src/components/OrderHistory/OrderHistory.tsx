@@ -1,8 +1,6 @@
-import { AiFillHeart } from 'react-icons/ai';
 import { BsDot } from 'react-icons/bs';
 import { CiReceipt } from 'react-icons/ci';
 import { PiShoppingCartSimpleLight } from 'react-icons/pi';
-import Skeleton from 'react-loading-skeleton';
 import { css } from '@styled-system/css';
 import { flex } from '@styled-system/patterns';
 import {
@@ -18,11 +16,18 @@ import {
   productPriceStyle,
   productActionsStyle,
   cartIconStyle,
-  heartIconStyle,
 } from './OrderHistory.style';
-import { Divider, EmptyDescription, IconButton, Typography, UnderlineButton } from '@/components';
+import {
+  Divider,
+  EmptyDescription,
+  IconButton,
+  Image,
+  LikeIconButton,
+  Typography,
+  UnderlineButton,
+} from '@/components';
 import { useAddToCart } from '@/hooks';
-import { Order } from '@/types';
+import { Order, OrderSchema } from '@/types';
 import { formatNumberWithCommas } from '@/utils';
 
 type OrderHistoryProps = {
@@ -31,7 +36,6 @@ type OrderHistoryProps = {
 };
 type OrderHeaderProps = {
   value: Order;
-  price: number;
 };
 type OrderProductsProps = {
   values: Order['products'];
@@ -40,16 +44,10 @@ type OrderProductProps = {
   value: Order['products'][number];
 };
 
-export const OrderHistory = ({ values, loading }: OrderHistoryProps) => {
-  if (loading) {
-    return (
-      <div>
-        <Skeleton width="100%" height="83px" />
-        <Skeleton width="100%" height="380px" className={css({ marginTop: '10px' })} />
-      </div>
-    );
-  }
-  if (values?.length === 0) {
+export const OrderHistory = ({ values }: OrderHistoryProps) => {
+  const emptyOrder = values?.length === 0 || values?.some((value) => value.payment === undefined);
+
+  if (emptyOrder) {
     return <EmptyDescription icon={<CiReceipt />} description="주문이 존재하지 않습니다." />;
   }
 
@@ -57,7 +55,7 @@ export const OrderHistory = ({ values, loading }: OrderHistoryProps) => {
     <div className={flex({ flexDirection: 'column', gap: '24px' })}>
       {values?.map((order) => (
         <div key={order.id}>
-          <OrderHeader value={order} price={order.totalPrice} />
+          <OrderHeader value={order} />
           <OrderProducts values={order.products} />
           <Divider />
         </div>
@@ -66,10 +64,18 @@ export const OrderHistory = ({ values, loading }: OrderHistoryProps) => {
   );
 };
 
-const OrderHeader = ({ value, price }: OrderHeaderProps) => {
-  const formattedDate = new Date(value.timestamp).toLocaleDateString('ko-KR');
-  const formattedOrderId = value.id.toString();
-  const priceString = `${formatNumberWithCommas(price)}원`;
+const OrderHeader = ({ value }: OrderHeaderProps) => {
+  const addToCart = useAddToCart();
+
+  const validValue = OrderSchema.required().parse(value);
+  const formattedDate = new Date(validValue.payment?.timestamp).toLocaleDateString('ko-KR');
+  const formattedOrderId = validValue.id.toString();
+  const paymentDetailString = `결제상세 ${formatNumberWithCommas(validValue.totalPrice)}원`;
+
+  const addOrderInProductsToCart = () => {
+    const productIds = validValue.products.map((product) => product.id);
+    addToCart.multiple(productIds);
+  };
 
   return (
     <header className={orderHeaderStyle}>
@@ -83,10 +89,10 @@ const OrderHeader = ({ value, price }: OrderHeaderProps) => {
       <div className={orderHeaderActionsStyle}>
         <UnderlineButton>
           <Typography as="span" variant="body">
-            결제상세 {priceString}원
+            {paymentDetailString}
           </Typography>
         </UnderlineButton>
-        <UnderlineButton>
+        <UnderlineButton onClick={addOrderInProductsToCart}>
           <Typography as="span" variant="body">
             전체 상품 담기
           </Typography>
@@ -104,14 +110,26 @@ const OrderProducts = ({ values }: OrderProductsProps) => (
   </div>
 );
 
-const OrderProduct = ({ value }: OrderProductProps) => {
+export const OrderProduct = ({ value }: OrderProductProps) => {
   const addToCart = useAddToCart();
+
   return (
     <div className={orderProductStyle}>
-      <img src={value.imageUrl} alt="주문 상품 이미지" className={productImageStyle} />
+      <Image src={value.imageUrl} alt="주문 상품 이미지" className={productImageStyle} />
       <div className={productInfoStyle}>
         <div className={productNameAndPriceStyle}>
-          <Typography variant="title">{value.name}</Typography>
+          <Typography
+            variant="title"
+            className={css({
+              fontSize: {
+                base: '16px',
+                sm: '18px',
+              },
+              lineHeight: 1.2,
+            })}
+          >
+            {value.name}
+          </Typography>
           <div className={productPriceStyle}>
             <Typography variant="body">{formatNumberWithCommas(value.price)}원</Typography>
             <BsDot />
@@ -121,9 +139,22 @@ const OrderProduct = ({ value }: OrderProductProps) => {
         <div className={productActionsStyle}>
           <IconButton
             icon={<PiShoppingCartSimpleLight className={cartIconStyle} />}
-            onClick={() => addToCart.open(value.id)}
+            onClick={() => addToCart.single(value.id)}
           />
-          <IconButton icon={<AiFillHeart className={heartIconStyle} />} />
+          <LikeIconButton
+            className={flex({
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '44px',
+              height: '44px',
+              padding: 0,
+              outlineColor: 'gray300',
+              outlineWidth: '1px',
+              outlineStyle: 'solid',
+            })}
+            productId={value.id}
+            liked={Boolean(value.liked)}
+          />
         </div>
       </div>
     </div>

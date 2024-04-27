@@ -2,6 +2,7 @@ import { css } from '@styled-system/css';
 import { Button, Overlay, Typography } from '@/components';
 
 type AlertProps = {
+  type?: 'confirm' | 'alert';
   message: string;
   confirmText?: string;
   cancelText?: string;
@@ -9,24 +10,26 @@ type AlertProps = {
   close: () => void;
 };
 
-export const Alert = ({ message, confirmText = '확인', cancelText = '취소', resolve, close }: AlertProps) => (
+export const Alert = ({ type, message, confirmText = '확인', cancelText = '취소', resolve, close }: AlertProps) => (
   <Overlay>
     <article className={modalStyles}>
       <Typography variant="subtitle" className={messageStyles}>
         {message}
       </Typography>
       <section className={buttonContainerStyles}>
-        <Button
-          className={buttonStyles}
-          variant="solid"
-          colorScheme="gray"
-          onClick={() => {
-            resolve(false);
-            close();
-          }}
-        >
-          {cancelText}
-        </Button>
+        {type === 'confirm' && (
+          <Button
+            className={buttonStyles}
+            variant="solid"
+            colorScheme="gray"
+            onClick={() => {
+              resolve(false);
+              close();
+            }}
+          >
+            {cancelText}
+          </Button>
+        )}
         <Button
           className={buttonStyles}
           variant="solid"

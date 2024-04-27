@@ -7,20 +7,16 @@ type UnderlineButtonProps = PropsWithChildren<{
 }>;
 
 export const UnderlineButton = ({ children, onClick }: UnderlineButtonProps) => (
-  <Button variant="ghost" className={underlineButtonStyle} onClick={onClick}>
+  <Button variant="ghost" onClick={onClick} style={{ padding: 0, width: 'max-content' }}>
     <div className={underlineTextStyle}>{children}</div>
   </Button>
 );
 
-const underlineButtonStyle = css({
-  padding: 0,
-  width: 'max-content',
-});
-
 const underlineTextStyle = css({
   display: 'inline',
   width: 'max-content',
-  paddingBottom: '4px',
+  padding: '0 0 4px 0',
   borderBottom: '1px solid #bbb',
   color: 'gray800',
+  fontSize: '14px',
 });

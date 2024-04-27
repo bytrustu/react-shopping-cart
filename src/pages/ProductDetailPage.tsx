@@ -20,11 +20,11 @@ export const ProductDetailPage = () => {
   const product = productsQuery.data && ProductSchema.parse(productsQuery.data);
 
   return (
-    <ProductDetail.Root loading={productsQuery.isLoading} product={product} addToCart={addToCart.open}>
-      <ErrorBoundary fallback={<Skeleton height="500px" />} resetKeys={['productDetail', product?.imageUrl]}>
+    <ProductDetail.Root loading={productsQuery.isLoading} product={product} addToCart={addToCart.single}>
+      <ErrorBoundary fallback={<Skeleton height="680px" />} resetKeys={['productDetail', product?.imageUrl]}>
         <ProductDetail.Image />
       </ErrorBoundary>
-      <ErrorBoundary fallback={<Skeleton height="500px" />} resetKeys={['productDetail', product?.price]}>
+      <ErrorBoundary fallback={<Skeleton height="680px" />} resetKeys={['productDetail', product?.price]}>
         <ProductDetail.Info />
       </ErrorBoundary>
     </ProductDetail.Root>

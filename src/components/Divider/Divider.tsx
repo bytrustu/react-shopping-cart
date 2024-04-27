@@ -1,9 +1,9 @@
 import { clsx } from 'clsx';
+import { HTMLProps } from 'react';
 import { css } from '@styled-system/css';
 
-type DividerProps = {
-  className?: string;
-};
+type DividerProps = HTMLProps<HTMLHRElement>;
+
 export const Divider = ({ className }: DividerProps) => (
   <hr
     className={clsx(
@@ -16,3 +16,5 @@ export const Divider = ({ className }: DividerProps) => (
     )}
   />
 );
+
+Divider.displayName = 'Divider';

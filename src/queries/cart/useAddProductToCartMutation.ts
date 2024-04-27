@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '../queryKeys.ts';
-import { LOCAL_STORAGE_CART_KEY } from '@/constants';
 import { Cart } from '@/types';
-import { http, localStorageUtil } from '@/utils';
+import { http } from '@/utils';
 
-export type UseAddProductToCartMutation = {
+type UseAddProductToCartMutation = {
   onMutate?: () => void;
 };
 
@@ -12,13 +11,27 @@ export const useAddProductToCartMutation = ({ onMutate }: UseAddProductToCartMut
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (cart: Cart) => http.post<Cart, Cart>('/cart', cart),
+    mutationFn: (cart: Cart) => http.post<Cart, Cart[]>('/cart', cart),
 
     onMutate: async (cart) => {
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.CARTS() });
       const previousCarts = queryClient.getQueryData<Cart[]>(QUERY_KEYS.CARTS()) || [];
+      const existingCart = previousCarts.find((c) => c.product.id === cart.product.id);
 
-      queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), [...previousCarts, cart]);
+      if (existingCart) {
+        const updatedCarts = previousCarts.map((c) => {
+          if (c.product.id === cart.product.id && cart.quantity <= 20) {
+            return {
+              ...c,
+              quantity: c.quantity + cart.quantity,
+            };
+          }
+          return c;
+        });
+
+        queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), updatedCarts);
+        return updatedCarts;
+      }
       onMutate?.();
       return previousCarts;
     },
@@ -27,14 +40,9 @@ export const useAddProductToCartMutation = ({ onMutate }: UseAddProductToCartMut
       queryClient.setQueryData(QUERY_KEYS.CARTS(), context);
     },
 
-    onSuccess: (newCart: Cart) => {
-      queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), (prevCarts) => [...(prevCarts ?? []), newCart]);
+    onSuccess: (newCarts: Cart[]) => {
+      queryClient.setQueryData<Cart[]>(QUERY_KEYS.CARTS(), newCarts);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CARTS() });
-      const cartIds = localStorageUtil.getItem<number[]>(LOCAL_STORAGE_CART_KEY) || [];
-      if (cartIds?.includes(newCart.id)) {
-        return;
-      }
-      localStorageUtil.setItem(LOCAL_STORAGE_CART_KEY, [...(cartIds ?? []), newCart.id]);
     },
   });
 };
