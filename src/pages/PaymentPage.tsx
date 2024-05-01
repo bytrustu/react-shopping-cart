@@ -148,7 +148,13 @@ const PaymentList = () => {
           })}
         >
           {orderProducts.map((cart) => (
-            <CartOrderProduct key={cart.product.id} value={cart} />
+            <CartOrderProduct
+              key={cart.product.id}
+              type="order"
+              product={cart.product}
+              checked={cart.checked}
+              quantity={cart.quantity}
+            />
           ))}
         </ul>
         <CartSummary totalPrice={totalPrice} productImages={checkedCartProductImages}>
